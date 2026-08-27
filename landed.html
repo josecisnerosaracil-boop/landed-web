@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landed — find your people before you fly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16213E;
+    --paper:#F3F5F7;
+    --paper-2:#ffffff;
+    --teal:#1F9C82;
+    --amber:#E8A33D;
+    --line:#C9CFD6;
+    --line-soft:#DEE3E8;
+    --font-display:'Fraunces', serif;
+    --font-mono:'IBM Plex Mono', monospace;
+    --font-body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+
+  nav{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:24px 6vw; max-width:1200px; margin:0 auto;
+  }
+  .wordmark{ font-family:var(--font-mono); font-weight:600; font-size:15px; letter-spacing:0.04em; }
+  .wordmark span{ color:var(--teal); }
+  nav .cta-nav{
+    font-family:var(--font-mono); font-size:13px;
+    border:1px solid var(--ink); padding:8px 16px; border-radius:999px;
+    text-decoration:none; transition:background .2s, color .2s;
+  }
+  nav .cta-nav:hover{ background:var(--ink); color:var(--paper-2); }
+
+  header.hero{
+    max-width:1200px; margin:0 auto; padding:6vw 6vw 4vw;
+    display:grid; grid-template-columns:1.1fr 1fr; gap:60px; align-items:center;
+  }
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--teal); margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:''; width:22px; height:1px; background:var(--teal); }
+  h1{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(34px, 4.6vw, 58px); line-height:1.05; letter-spacing:-0.01em;
+    margin-bottom:22px;
+  }
+  h1 em{ font-style:italic; color:var(--teal); }
+  .hero p.lede{ font-size:17px; color:#3E4A63; max-width:48ch; margin-bottom:30px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary{
+    background:var(--ink); color:var(--paper-2); font-family:var(--font-mono);
+    font-size:14px; padding:14px 26px; border-radius:8px; border:none; cursor:pointer;
+    text-decoration:none; display:inline-block; transition:transform .15s ease, background .2s;
+  }
+  .btn-primary:hover{ background:var(--teal); transform:translateY(-1px); }
+  .btn-ghost{
+    font-family:var(--font-mono); font-size:14px; padding:14px 22px; color:var(--ink);
+    text-decoration:none; border-bottom:1px solid var(--line);
+  }
+
+  .pass-wrap{ position:relative; }
+  .pass{
+    background:var(--paper-2); border-radius:14px;
+    box-shadow:0 20px 50px -20px rgba(22,33,62,0.25);
+    display:grid; grid-template-columns:1fr 100px; position:relative;
+    overflow:hidden; border:1px solid var(--line-soft);
+  }
+  .pass-main{ padding:26px 24px; }
+  .pass-row{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px; }
+  .pass-label{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#8892A6; margin-bottom:6px; }
+  .pass-value{ font-family:var(--font-display); font-size:22px; font-weight:600; }
+  .route{ display:flex; align-items:center; gap:14px; margin:8px 0 20px; }
+  .route .code{ font-family:var(--font-mono); font-size:30px; font-weight:600; max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .route .path{ flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); position:relative; }
+  .route .path::after{ content:'✈'; position:absolute; right:0; top:-9px; font-size:15px; color:var(--teal); }
+  .pass-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; border-top:1px dashed var(--line); padding-top:16px; }
+  .pass-grid .pass-value{ font-size:15px; }
+  .pass-stub{
+    background:var(--ink); color:var(--paper); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:14px; position:relative;
+  }
+  .pass-stub::before{
+    content:''; position:absolute; left:-8px; top:0; bottom:0; width:16px;
+    background-image:radial-gradient(circle, var(--paper) 4px, transparent 4.5px);
+    background-size:16px 16px; background-repeat:repeat-y;
+  }
+  .barcode{ writing-mode:vertical-rl; font-family:var(--font-mono); font-size:11px; letter-spacing:0.3em; opacity:0.8; }
+  .stamp{
+    font-family:var(--font-mono); font-size:10px; border:1px solid var(--amber); color:var(--amber);
+    padding:4px 6px; border-radius:4px; transform:rotate(4deg);
+  }
+
+  section{ max-width:1200px; margin:0 auto; padding:5vw 6vw; }
+  .section-head{ max-width:60ch; margin-bottom:44px; }
+  .section-head .eyebrow{ margin-bottom:14px; }
+  h2{ font-family:var(--font-display); font-weight:600; font-size:clamp(26px, 3vw, 36px); letter-spacing:-0.01em; }
+  .cols3{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .card{ background:var(--paper-2); border:1px solid var(--line-soft); border-radius:12px; padding:28px 24px; }
+  .card .tag{ font-family:var(--font-mono); font-size:11px; color:var(--teal); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px; display:block; }
+  .card h3{ font-family:var(--font-display); font-size:20px; font-weight:600; margin-bottom:10px; }
+  .card p{ color:#4A5568; font-size:15px; }
+
+  .honest{
+    background:var(--paper-2); border:1px dashed var(--line); border-radius:12px;
+    padding:24px 26px; font-size:14.5px; color:#3E4A63; max-width:70ch;
+  }
+  .honest strong{ color:var(--ink); }
+
+  /* Popular routes */
+  .routes-list{ display:flex; flex-wrap:wrap; gap:12px; }
+  .route-chip{
+    background:var(--paper-2); border:1px solid var(--line-soft); border-radius:999px;
+    padding:10px 18px; font-family:var(--font-mono); font-size:13px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .route-chip .n{ background:var(--teal); color:#fff; border-radius:999px; padding:2px 9px; font-size:12px; }
+  .routes-empty{ font-family:var(--font-mono); font-size:13px; color:#8892A6; }
+
+  #signup{
+    background:var(--ink); border-radius:20px; color:var(--paper);
+    padding:5vw 6vw; margin:5vw 6vw; max-width:1200px;
+  }
+  #signup .section-head h2{ color:var(--paper-2); }
+  #signup .eyebrow{ color:var(--amber); }
+  #signup .eyebrow::before{ background:var(--amber); }
+  .form-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; }
+  form{ display:flex; flex-direction:column; gap:16px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#9AA5BD; }
+  .field input{
+    background:#1F2C4D; border:1px solid #33406A; color:var(--paper-2);
+    padding:12px 14px; border-radius:8px; font-family:var(--font-body); font-size:15px; width:100%;
+  }
+  .field input::placeholder{ color:#6C7A9C; }
+  .field input:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .submit-btn{
+    background:var(--teal); color:#08251E; font-family:var(--font-mono); font-weight:600; font-size:14px;
+    padding:14px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:6px;
+  }
+  .submit-btn:hover{ filter:brightness(1.08); }
+  .submit-btn:disabled{ opacity:0.6; cursor:default; }
+  .form-note{ font-size:13px; color:#9AA5BD; margin-top:4px; }
+  .live-count{ font-family:var(--font-mono); font-size:13px; color:#9AA5BD; margin-top:16px; }
+  .live-count strong{ color:var(--amber); font-size:16px; }
+
+  .ticket-result{ display:none; background:var(--paper-2); color:var(--ink); border-radius:14px; padding:26px; }
+  .ticket-result.show{ display:block; }
+  .ticket-result .pass-label{ color:#8892A6; }
+  .ticket-result .route .code{ font-size:24px; }
+  .error-msg{ color:#FF9F87; font-size:13px; display:none; }
+  .error-msg.show{ display:block; }
+
+  footer{
+    max-width:1200px; margin:0 auto; padding:4vw 6vw 6vw;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-mono); font-size:12px; color:#8892A6; flex-wrap:wrap; gap:12px;
+  }
+
+  @media (max-width:860px){
+    header.hero{ grid-template-columns:1fr; padding-top:10vw; }
+    .cols3{ grid-template-columns:1fr; }
+    .form-wrap{ grid-template-columns:1fr; }
+    .row2{ grid-template-columns:1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark">LAND<span>ED</span></div>
+  <a href="#signup" class="cta-nav">Find your route →</a>
+</nav>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Study abroad, any school, any city</div>
+    <h1>Don't land abroad <em>knowing no one.</em></h1>
+    <p class="lede">Pick your university. Pick where you're headed. Meet everyone from your school going the same place — before any of you land.</p>
+    <div class="hero-actions">
+      <a href="#signup" class="btn-primary">Find your route</a>
+      <a href="#how" class="btn-ghost">How it works</a>
+    </div>
+  </div>
+
+  <div class="pass-wrap">
+    <div class="pass">
+      <div class="pass-main">
+        <div class="pass-row">
+          <div>
+            <div class="pass-label">Passenger</div>
+            <div class="pass-value">You, probably</div>
+          </div>
+          <div class="stamp">PENDING</div>
+        </div>
+        <div class="route">
+          <div class="code" id="heroFrom">YOUR&nbsp;UNI</div>
+          <div class="path"></div>
+          <div class="code" id="heroTo">???</div>
+        </div>
+        <div class="pass-grid">
+          <div>
+            <div class="pass-label">Term</div>
+            <div class="pass-value">TBD</div>
+          </div>
+          <div>
+            <div class="pass-label">Status</div>
+            <div class="pass-value">Solo</div>
+          </div>
+          <div>
+            <div class="pass-label">Seat</div>
+            <div class="pass-value">?</div>
+          </div>
+        </div>
+      </div>
+      <div class="pass-stub">
+        <div class="barcode">LANDED-2027</div>
+        <div class="stamp" style="transform:rotate(-4deg)">✈</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="section-head">
+    <div class="eyebrow">How it works</div>
+    <h2>Three things, kept deliberately simple</h2>
+  </div>
+  <div class="cols3">
+    <div class="card">
+      <span class="tag">01 — Connect</span>
+      <h3>Meet your cohort</h3>
+      <p>Everyone from your university heading to the same city, same term, gets grouped together — before anyone lands. Find a roommate, split a taxi from the airport, stop guessing who else is going.</p>
+    </div>
+    <div class="card">
+      <span class="tag">02 — Learn</span>
+      <h3>Guides that aren't generic</h3>
+      <p>SIM cards, bank accounts, housing near campus, what things actually cost — written by students who just did your exact route, not a travel blog written for anyone and no one.</p>
+    </div>
+    <div class="card">
+      <span class="tag">03 — Save</span>
+      <h3>Deals worth having</h3>
+      <p>As each route's group grows, local partners — housing, insurance, SIM — compete for a group of verified incoming students instead of guessing at random travelers.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="honest">
+    <strong>Where this actually stands:</strong> this just launched. There's no giant network yet — it's being built by a student in Madrid who's watched friends scatter to Barcelona, Florence, and beyond every semester with zero way to find each other first. Sign up and you help kick off your own route's community.
+  </div>
+</section>
+
+<section id="routes">
+  <div class="section-head">
+    <div class="eyebrow">Right now</div>
+    <h2>Routes people have already started</h2>
+  </div>
+  <div class="routes-list" id="routesList">
+    <div class="routes-empty">Loading routes…</div>
+  </div>
+</section>
+
+<section id="signup">
+  <div class="section-head">
+    <div class="eyebrow">Boarding starts here</div>
+    <h2>Get your seat on the list</h2>
+  </div>
+  <div class="form-wrap">
+    <div>
+      <form id="signupForm">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Jordan Reyes" required>
+        </div>
+        <div class="field">
+          <label for="email">School email</label>
+          <input id="email" type="email" placeholder="you@youruni.edu" required>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="university">Your university</label>
+            <input id="university" type="text" list="uniOptions" placeholder="Penn State" required>
+            <datalist id="uniOptions">
+              <option value="Penn State">
+              <option value="NYU">
+              <option value="Boston University">
+              <option value="Universidad Complutense de Madrid">
+              <option value="Bocconi">
+              <option value="UCLA">
+            </datalist>
+          </div>
+          <div class="field">
+            <label for="destination">Where you're headed</label>
+            <input id="destination" type="text" list="destOptions" placeholder="Florence" required>
+            <datalist id="destOptions">
+              <option value="Madrid">
+              <option value="Barcelona">
+              <option value="Florence">
+              <option value="Rome">
+              <option value="Paris">
+              <option value="Berlin">
+              <option value="Singapore">
+              <option value="London">
+            </datalist>
+          </div>
+        </div>
+        <div class="field">
+          <label for="worry">Biggest question right now (optional)</label>
+          <input id="worry" type="text" placeholder="e.g. how do I even find housing?">
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Generate my boarding pass</button>
+        <div class="error-msg" id="errorMsg">Something went wrong saving your spot — mind trying again?</div>
+        <div class="form-note">No spam. Just the group invite once your route has a handful of people.</div>
+      </form>
+      <div class="live-count" id="liveCount">Loading count…</div>
+    </div>
+
+    <div class="ticket-result" id="ticketResult">
+      <div class="pass-row">
+        <div>
+          <div class="pass-label">Passenger</div>
+          <div class="pass-value" id="ticketName">—</div>
+        </div>
+        <div class="stamp">CONFIRMED</div>
+      </div>
+      <div class="route">
+        <div class="code" id="ticketFrom">—</div>
+        <div class="path"></div>
+        <div class="code" id="ticketTo">—</div>
+      </div>
+      <div class="pass-grid">
+        <div>
+          <div class="pass-label">University</div>
+          <div class="pass-value" id="ticketUni" style="font-size:14px;">—</div>
+        </div>
+        <div>
+          <div class="pass-label">Destination</div>
+          <div class="pass-value" id="ticketDest" style="font-size:14px;">—</div>
+        </div>
+        <div>
+          <div class="pass-label">Seat No.</div>
+          <div class="pass-value" id="ticketSeat">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Built by a student in Madrid, for anyone about to scatter across the world.</div>
+  <div>Landed — not affiliated with any university.</div>
+</footer>
+
+<script>
+(function(){
+  const SUPABASE_URL = 'https://zsiwnivfmdnikqwslycv.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_Z0yKOoePcsR7InFWIuIcCg_vNOjlZjZ';
+
+  const form = document.getElementById('signupForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const ticketResult = document.getElementById('ticketResult');
+  const liveCount = document.getElementById('liveCount');
+  const routesList = document.getElementById('routesList');
+  const uniInput = document.getElementById('university');
+  const destInput = document.getElementById('destination');
+  const heroFrom = document.getElementById('heroFrom');
+  const heroTo = document.getElementById('heroTo');
+
+  function code(str, len){
+    if(!str) return '???';
+    const words = str.trim().split(/\s+/);
+    if(words.length > 1){
+      return words.map(w => w[0]).join('').toUpperCase().slice(0, len || 4);
+    }
+    return str.trim().toUpperCase().slice(0, len || 3);
+  }
+
+  uniInput.addEventListener('input', () => { heroFrom.textContent = uniInput.value ? code(uniInput.value, 4) : 'YOUR UNI'; });
+  destInput.addEventListener('input', () => { heroTo.textContent = destInput.value ? code(destInput.value, 3) : '???'; });
+
+  async function refreshAll(){
+    try{
+      const res = await fetch(SUPABASE_URL + '/rest/v1/route_counts?select=*', {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        }
+      });
+      if(!res.ok){ throw new Error('fetch failed: ' + res.status); }
+      const rows = await res.json();
+
+      const total = rows.reduce((sum, r) => sum + Number(r.n || 0), 0);
+      liveCount.innerHTML = '<strong>' + total + '</strong> ' + (total === 1 ? 'person has' : 'people have') + ' claimed a seat so far';
+
+      const sorted = rows.slice().sort((a,b) => b.n - a.n).slice(0, 12);
+
+      if(sorted.length === 0){
+        routesList.innerHTML = '<div class="routes-empty">No routes yet — be the first to start one below.</div>';
+      } else {
+        routesList.innerHTML = sorted.map(r =>
+          '<div class="route-chip">' + r.university + ' → ' + r.destination + '<span class="n">' + r.n + '</span></div>'
+        ).join('');
+      }
+    }catch(e){
+      console.error('Supabase read error:', e);
+      liveCount.textContent = "Couldn't load the count right now.";
+      routesList.innerHTML = '<div class="routes-empty">Couldn\'t load routes right now.</div>';
+    }
+  }
+  refreshAll();
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    errorMsg.classList.remove('show');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving your seat…';
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const university = uniInput.value.trim();
+    const destination = destInput.value.trim();
+    const worry = document.getElementById('worry').value.trim();
+
+    try{
+      const res = await fetch(SUPABASE_URL + '/rest/v1/signups', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ name, email, university, destination, worry: worry || null })
+      });
+      if(!res.ok){ throw new Error('insert failed: ' + res.status); }
+
+      document.getElementById('ticketName').textContent = name;
+      document.getElementById('ticketFrom').textContent = code(university, 4);
+      document.getElementById('ticketTo').textContent = code(destination, 3);
+      document.getElementById('ticketUni').textContent = university;
+      document.getElementById('ticketDest').textContent = destination;
+      document.getElementById('ticketSeat').textContent = '#' + Math.floor(1000 + Math.random()*8999);
+      ticketResult.classList.add('show');
+      form.reset();
+      heroFrom.textContent = 'YOUR UNI';
+      heroTo.textContent = '???';
+      refreshAll();
+    }catch(err){
+      console.error('Supabase write error:', err);
+      errorMsg.classList.add('show');
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Generate my boarding pass';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
