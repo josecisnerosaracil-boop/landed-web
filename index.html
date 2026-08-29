@@ -20,197 +20,140 @@
     --font-mono:'IBM Plex Mono', monospace;
     --font-body:'Inter', sans-serif;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
+  *{ box-sizing:border-box; margin:0; padding:0; }
   body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--font-body);
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
+    background:var(--paper); color:var(--ink); font-family:var(--font-body);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
   }
-  a{color:inherit;}
+  a{ color:inherit; }
+  button{ font-family:inherit; }
 
-  nav{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:24px 6vw; max-width:1200px; margin:0 auto;
+  .screen{ min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:8vh 6vw; }
+  .wordmark-standalone{
+    font-family:var(--font-mono); font-weight:600; font-size:16px; letter-spacing:0.04em; margin-bottom:40px;
   }
-  .wordmark{ font-family:var(--font-mono); font-weight:600; font-size:15px; letter-spacing:0.04em; }
-  .wordmark span{ color:var(--teal); }
-  nav .cta-nav{
-    font-family:var(--font-mono); font-size:13px;
-    border:1px solid var(--ink); padding:8px 16px; border-radius:999px;
-    text-decoration:none; transition:background .2s, color .2s;
-  }
-  nav .cta-nav:hover{ background:var(--ink); color:var(--paper-2); }
+  .wordmark-standalone span{ color:var(--teal); }
 
-  header.hero{
-    max-width:1200px; margin:0 auto; padding:6vw 6vw 4vw;
-    display:grid; grid-template-columns:1.1fr 1fr; gap:60px; align-items:center;
-  }
-  .eyebrow{
-    font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em;
-    text-transform:uppercase; color:var(--teal); margin-bottom:18px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .eyebrow::before{ content:''; width:22px; height:1px; background:var(--teal); }
-  h1{
-    font-family:var(--font-display); font-weight:600;
-    font-size:clamp(34px, 4.6vw, 58px); line-height:1.05; letter-spacing:-0.01em;
-    margin-bottom:22px;
-  }
-  h1 em{ font-style:italic; color:var(--teal); }
-  .hero p.lede{ font-size:17px; color:#3E4A63; max-width:48ch; margin-bottom:30px; }
-  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
   .btn-primary{
     background:var(--ink); color:var(--paper-2); font-family:var(--font-mono);
     font-size:14px; padding:14px 26px; border-radius:8px; border:none; cursor:pointer;
-    text-decoration:none; display:inline-block; transition:transform .15s ease, background .2s;
+    transition:background .2s;
   }
-  .btn-primary:hover{ background:var(--teal); transform:translateY(-1px); }
+  .btn-primary:hover{ background:var(--teal); }
+  .btn-primary:disabled{ opacity:0.6; cursor:default; }
   .btn-ghost{
-    font-family:var(--font-mono); font-size:14px; padding:14px 22px; color:var(--ink);
-    text-decoration:none; border-bottom:1px solid var(--line);
+    font-family:var(--font-mono); font-size:13px; background:none; border:1px solid var(--line);
+    border-radius:999px; padding:10px 18px; cursor:pointer; color:var(--ink);
   }
 
-  .pass-wrap{ position:relative; }
-  .pass{
-    background:var(--paper-2); border-radius:14px;
-    box-shadow:0 20px 50px -20px rgba(22,33,62,0.25);
-    display:grid; grid-template-columns:1fr 100px; position:relative;
-    overflow:hidden; border:1px solid var(--line-soft);
+  .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+  .field label{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8892A6;
   }
-  .pass-main{ padding:26px 24px; }
-  .pass-row{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px; }
-  .pass-label{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#8892A6; margin-bottom:6px; }
-  .pass-value{ font-family:var(--font-display); font-size:22px; font-weight:600; }
-  .route{ display:flex; align-items:center; gap:14px; margin:8px 0 20px; }
-  .route .code{ font-family:var(--font-mono); font-size:30px; font-weight:600; max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .route .path{ flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); position:relative; }
-  .route .path::after{ content:'✈'; position:absolute; right:0; top:-9px; font-size:15px; color:var(--teal); }
-  .pass-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; border-top:1px dashed var(--line); padding-top:16px; }
-  .pass-grid .pass-value{ font-size:15px; }
-  .pass-stub{
-    background:var(--ink); color:var(--paper); display:flex; flex-direction:column;
-    align-items:center; justify-content:center; gap:14px; position:relative;
-  }
-  .pass-stub::before{
-    content:''; position:absolute; left:-8px; top:0; bottom:0; width:16px;
-    background-image:radial-gradient(circle, var(--paper) 4px, transparent 4.5px);
-    background-size:16px 16px; background-repeat:repeat-y;
-  }
-  .barcode{ writing-mode:vertical-rl; font-family:var(--font-mono); font-size:11px; letter-spacing:0.3em; opacity:0.8; }
-  .stamp{
-    font-family:var(--font-mono); font-size:10px; border:1px solid var(--amber); color:var(--amber);
-    padding:4px 6px; border-radius:4px; transform:rotate(4deg);
-  }
-
-  section{ max-width:1200px; margin:0 auto; padding:5vw 6vw; }
-  .section-head{ max-width:60ch; margin-bottom:44px; }
-  .section-head .eyebrow{ margin-bottom:14px; }
-  h2{ font-family:var(--font-display); font-weight:600; font-size:clamp(26px, 3vw, 36px); letter-spacing:-0.01em; }
-  .cols3{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
-  .card{ background:var(--paper-2); border:1px solid var(--line-soft); border-radius:12px; padding:28px 24px; }
-  .card .tag{ font-family:var(--font-mono); font-size:11px; color:var(--teal); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px; display:block; }
-  .card h3{ font-family:var(--font-display); font-size:20px; font-weight:600; margin-bottom:10px; }
-  .card p{ color:#4A5568; font-size:15px; }
-
-  .honest{
-    background:var(--paper-2); border:1px dashed var(--line); border-radius:12px;
-    padding:24px 26px; font-size:14.5px; color:#3E4A63; max-width:70ch;
-  }
-  .honest strong{ color:var(--ink); }
-
-  /* Popular routes */
-  .routes-list{ display:flex; flex-wrap:wrap; gap:12px; }
-  .route-chip{
-    background:var(--paper-2); border:1px solid var(--line-soft); border-radius:999px;
-    padding:10px 18px; font-family:var(--font-mono); font-size:13px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .route-chip .n{ background:var(--teal); color:#fff; border-radius:999px; padding:2px 9px; font-size:12px; }
-  .routes-empty{ font-family:var(--font-mono); font-size:13px; color:#8892A6; }
-
-  #signup{
-    background:var(--ink); border-radius:20px; color:var(--paper);
-    padding:5vw 6vw; margin:5vw 6vw; max-width:1200px;
-  }
-  #signup .section-head h2{ color:var(--paper-2); }
-  #signup .eyebrow{ color:var(--amber); }
-  #signup .eyebrow::before{ background:var(--amber); }
-  .form-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; }
-  form{ display:flex; flex-direction:column; gap:16px; }
-  .field{ display:flex; flex-direction:column; gap:6px; }
-  .field label{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#9AA5BD; }
   .field input{
-    background:#1F2C4D; border:1px solid #33406A; color:var(--paper-2);
-    padding:12px 14px; border-radius:8px; font-family:var(--font-body); font-size:15px; width:100%;
-  }
-  .field input::placeholder{ color:#6C7A9C; }
-  .field input:focus{ outline:2px solid var(--teal); outline-offset:1px; }
-  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .submit-btn{
-    background:var(--teal); color:#08251E; font-family:var(--font-mono); font-weight:600; font-size:14px;
-    padding:14px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:6px;
-  }
-  .submit-btn:hover{ filter:brightness(1.08); }
-  .submit-btn:disabled{ opacity:0.6; cursor:default; }
-  .form-note{ font-size:13px; color:#9AA5BD; margin-top:4px; }
-  .live-count{ font-family:var(--font-mono); font-size:13px; color:#9AA5BD; margin-top:16px; }
-  .live-count strong{ color:var(--amber); font-size:16px; }
-
-  .ticket-result{ display:none; background:var(--paper-2); color:var(--ink); border-radius:14px; padding:26px; }
-  .ticket-result.show{ display:block; }
-  .ticket-result .pass-label{ color:#8892A6; }
-  .ticket-result .route .code{ font-size:24px; }
-  .cohort-heading{
-    font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-    color:#8892A6; margin-bottom:10px;
-  }
-  .cohort-person{
-    display:flex; align-items:center; gap:10px;
-    padding:10px 0; border-top:1px solid var(--line-soft);
-  }
-  .cohort-person:first-of-type{ border-top:none; }
-  .cohort-avatar{
-    width:30px; height:30px; border-radius:50%; background:var(--teal); color:#fff;
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-mono); font-size:12px; font-weight:600; flex-shrink:0;
-  }
-  .cohort-name{ font-size:14px; font-weight:600; }
-  .cohort-uni{ font-size:12px; color:#8892A6; }
-  .cohort-empty{
-    font-size:13.5px; color:#4A5568; background:var(--paper);
-    border:1px dashed var(--line); border-radius:10px; padding:14px 16px;
-  }
-  .cohort-loading{ font-family:var(--font-mono); font-size:12px; color:#8892A6; }
-
-  /* Community / profiles / chat */
-  .community-panel{ background:var(--paper-2); border:1px solid var(--line-soft); border-radius:14px; padding:28px; max-width:520px; }
-  .auth-tabs{ display:flex; gap:8px; margin-bottom:20px; }
-  .auth-tab{
-    font-family:var(--font-mono); font-size:13px; padding:8px 16px; border-radius:999px;
-    border:1px solid var(--line); background:none; cursor:pointer; color:var(--ink);
-  }
-  .auth-tab.active{ background:var(--ink); color:var(--paper-2); border-color:var(--ink); }
-  #authForm .field, #profileForm .field{ margin-bottom:14px; }
-  #authForm input, #profileForm input{
     background:var(--paper); border:1px solid var(--line-soft); color:var(--ink);
     padding:12px 14px; border-radius:8px; font-family:var(--font-body); font-size:15px; width:100%;
   }
-  .profile-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:20px; }
+  .field input:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .error-msg{ color:#C24A3B; font-size:13px; display:none; margin-top:8px; }
+  .error-msg.show{ display:block; }
+
+  /* Auth screen */
+  .auth-card{
+    background:var(--paper-2); border:1px solid var(--line-soft); border-radius:16px;
+    padding:36px; max-width:400px; width:100%;
+    box-shadow:0 20px 50px -25px rgba(22,33,62,0.25);
+  }
+  .auth-tabs{ display:flex; gap:8px; margin-bottom:24px; }
+  .auth-tab{
+    flex:1; font-family:var(--font-mono); font-size:13px; padding:10px 0; border-radius:999px;
+    border:1px solid var(--line); background:none; cursor:pointer; color:var(--ink);
+  }
+  .auth-tab.active{ background:var(--ink); color:var(--paper-2); border-color:var(--ink); }
+
+  /* Ticket / profile creation screen */
+  .ticket-card-outer{
+    background:var(--paper-2); border:1px solid var(--line-soft); border-radius:16px;
+    padding:36px; max-width:460px; width:100%;
+    box-shadow:0 20px 50px -25px rgba(22,33,62,0.25);
+  }
+  .ticket-intro{ font-size:14.5px; color:#4A5568; margin-bottom:24px; }
+
+  /* Boarding pass card (used for reveal + mini version in app) */
+  .pass{
+    background:var(--paper-2); border-radius:14px; box-shadow:0 20px 50px -20px rgba(22,33,62,0.25);
+    display:grid; grid-template-columns:1fr 90px; position:relative; overflow:hidden;
+    border:1px solid var(--line-soft);
+  }
+  .pass-main{ padding:22px 20px; }
+  .pass-row{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+  .pass-label{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#8892A6; margin-bottom:4px; }
+  .pass-value{ font-family:var(--font-display); font-size:18px; font-weight:600; }
+  .route{ display:flex; align-items:center; gap:12px; margin:6px 0 16px; }
+  .route .code{ font-family:var(--font-mono); font-size:24px; font-weight:600; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .route .path{ flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); position:relative; }
+  .route .path::after{ content:'✈'; position:absolute; right:0; top:-9px; font-size:14px; color:var(--teal); }
+  .pass-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; border-top:1px dashed var(--line); padding-top:14px; }
+  .pass-grid .pass-value{ font-size:13px; }
+  .pass-stub{
+    background:var(--ink); color:var(--paper); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:12px; position:relative;
+  }
+  .pass-stub::before{
+    content:''; position:absolute; left:-7px; top:0; bottom:0; width:14px;
+    background-image:radial-gradient(circle, var(--paper) 4px, transparent 4.5px);
+    background-size:14px 14px; background-repeat:repeat-y;
+  }
+  .barcode{ writing-mode:vertical-rl; font-family:var(--font-mono); font-size:10px; letter-spacing:0.25em; opacity:0.8; }
+  .stamp{
+    font-family:var(--font-mono); font-size:9px; border:1px solid var(--amber); color:var(--amber);
+    padding:3px 6px; border-radius:4px; transform:rotate(4deg);
+  }
+
+  /* Main app */
+  .app-nav{
+    width:100%; max-width:1100px; display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:36px; flex-wrap:wrap; gap:16px;
+  }
+  .wordmark{ font-family:var(--font-mono); font-weight:600; font-size:15px; }
+  .wordmark span{ color:var(--teal); }
+  .app-tabs{ display:flex; gap:8px; background:var(--paper-2); border:1px solid var(--line-soft); border-radius:999px; padding:4px; }
+  .app-tab{
+    font-family:var(--font-mono); font-size:13px; padding:9px 18px; border-radius:999px;
+    border:none; background:none; cursor:pointer; color:#4A5568;
+  }
+  .app-tab.active{ background:var(--ink); color:var(--paper-2); }
+
+  .app-panel{ width:100%; max-width:1100px; }
+  .panel-heading{
+    font-family:var(--font-display); font-size:20px; font-weight:600; margin:36px 0 18px;
+  }
+  .panel-heading:first-of-type{ margin-top:0; }
+
+  .mini-pass{ max-width:420px; }
+
+  .profile-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:18px; }
   .profile-card{
     background:var(--paper-2); border:1px solid var(--line-soft); border-radius:14px; padding:20px;
-    display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px;
+    display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px;
   }
   .avatar-img{ width:64px; height:64px; border-radius:50%; object-fit:cover; }
   .avatar-fallback{
     width:64px; height:64px; border-radius:50%; background:var(--teal); color:#fff;
     display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:24px;
   }
-  .profile-card-name{ font-weight:600; font-family:var(--font-display); font-size:16px; }
+  .profile-card-name{ font-weight:600; font-family:var(--font-display); font-size:16px; margin-top:6px; }
   .profile-card-uni{ font-size:12px; color:#8892A6; font-family:var(--font-mono); }
+  .profile-card-dest{ font-size:12px; color:var(--teal); font-family:var(--font-mono); }
   .profile-card-bio{ font-size:13.5px; color:#4A5568; }
   .profile-msg-btn{ margin-top:8px; border:1px solid var(--line); border-radius:999px; padding:8px 18px; font-size:13px; background:none; cursor:pointer; }
+  .empty-note{
+    font-size:13.5px; color:#4A5568; background:var(--paper-2);
+    border:1px dashed var(--line); border-radius:10px; padding:16px 18px; grid-column:1/-1;
+  }
+  .loading-note{ font-family:var(--font-mono); font-size:12px; color:#8892A6; }
+
   .chat-window{
     background:var(--paper-2); border:1px solid var(--line-soft); border-radius:14px;
     padding:16px; height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
@@ -224,6 +167,7 @@
     flex:1; background:var(--paper-2); border:1px solid var(--line-soft); border-radius:8px;
     padding:12px 14px; font-family:var(--font-body); font-size:14px;
   }
+
   .chat-modal{
     position:fixed; inset:0; background:rgba(22,33,62,0.5); z-index:50;
     display:flex; align-items:center; justify-content:center; padding:20px;
@@ -234,429 +178,168 @@
     font-family:var(--font-display); font-weight:600; font-size:18px;
   }
   .chat-modal-header button{ background:none; border:none; font-size:18px; cursor:pointer; }
-  .error-msg{ color:#FF9F87; font-size:13px; display:none; }
-  .error-msg.show{ display:block; }
 
-  footer{
-    max-width:1200px; margin:0 auto; padding:4vw 6vw 6vw;
-    display:flex; justify-content:space-between; align-items:center;
-    font-family:var(--font-mono); font-size:12px; color:#8892A6; flex-wrap:wrap; gap:12px;
+  .top-error{
+    max-width:400px; width:100%; background:#FDEAE6; border:1px solid #F0B8AC; color:#9A3B2C;
+    border-radius:10px; padding:12px 16px; font-size:13.5px; margin-bottom:20px; display:none;
   }
+  .top-error.show{ display:block; }
 
-  @media (max-width:860px){
-    header.hero{ grid-template-columns:1fr; padding-top:10vw; }
-    .cols3{ grid-template-columns:1fr; }
-    .form-wrap{ grid-template-columns:1fr; }
+  @media (max-width:640px){
     .row2{ grid-template-columns:1fr; }
+    .auth-card, .ticket-card-outer{ padding:26px; }
   }
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="wordmark">LAND<span>ED</span></div>
-  <a href="#signup" class="cta-nav">Find your route →</a>
-</nav>
+<div id="app">
 
-<header class="hero">
-  <div>
-    <div class="eyebrow">Study abroad, any school, any city</div>
-    <h1>Don't land abroad <em>knowing no one.</em></h1>
-    <p class="lede">Pick your university. Pick where you're headed. Meet everyone from your school going the same place — before any of you land.</p>
-    <div class="hero-actions">
-      <a href="#signup" class="btn-primary">Find your route</a>
-      <a href="#how" class="btn-ghost">How it works</a>
-    </div>
-  </div>
-
-  <div class="pass-wrap">
-    <div class="pass">
-      <div class="pass-main">
-        <div class="pass-row">
-          <div>
-            <div class="pass-label">Passenger</div>
-            <div class="pass-value">You, probably</div>
-          </div>
-          <div class="stamp">PENDING</div>
-        </div>
-        <div class="route">
-          <div class="code" id="heroFrom">YOUR&nbsp;UNI</div>
-          <div class="path"></div>
-          <div class="code" id="heroTo">???</div>
-        </div>
-        <div class="pass-grid">
-          <div>
-            <div class="pass-label">Term</div>
-            <div class="pass-value">TBD</div>
-          </div>
-          <div>
-            <div class="pass-label">Status</div>
-            <div class="pass-value">Solo</div>
-          </div>
-          <div>
-            <div class="pass-label">Seat</div>
-            <div class="pass-value">?</div>
-          </div>
-        </div>
+  <!-- AUTH SCREEN -->
+  <div id="screenAuth" class="screen">
+    <div class="wordmark-standalone">LAND<span>ED</span></div>
+    <div class="top-error" id="loadError">Couldn't connect right now — try refreshing the page.</div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-tab="signin">Log in</button>
+        <button type="button" class="auth-tab" data-tab="signup">Create account</button>
       </div>
-      <div class="pass-stub">
-        <div class="barcode">LANDED-2027</div>
-        <div class="stamp" style="transform:rotate(-4deg)">✈</div>
-      </div>
-    </div>
-  </div>
-</header>
-
-<section id="how">
-  <div class="section-head">
-    <div class="eyebrow">How it works</div>
-    <h2>Three things, kept deliberately simple</h2>
-  </div>
-  <div class="cols3">
-    <div class="card">
-      <span class="tag">01 — Connect</span>
-      <h3>Meet your cohort</h3>
-      <p>Everyone from your university heading to the same city, same term, gets grouped together — before anyone lands. Find a roommate, split a taxi from the airport, stop guessing who else is going.</p>
-    </div>
-    <div class="card">
-      <span class="tag">02 — Learn</span>
-      <h3>Guides that aren't generic</h3>
-      <p>SIM cards, bank accounts, housing near campus, what things actually cost — written by students who just did your exact route, not a travel blog written for anyone and no one.</p>
-    </div>
-    <div class="card">
-      <span class="tag">03 — Save</span>
-      <h3>Deals worth having</h3>
-      <p>As each route's group grows, local partners — housing, insurance, SIM — compete for a group of verified incoming students instead of guessing at random travelers.</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="honest">
-    <strong>Where this actually stands:</strong> this just launched. There's no giant network yet — it's being built by a student in Madrid who's watched friends scatter to Barcelona, Florence, and beyond every semester with zero way to find each other first. Sign up and you help kick off your own route's community.
-  </div>
-</section>
-
-<section id="routes">
-  <div class="section-head">
-    <div class="eyebrow">Right now</div>
-    <h2>Routes people have already started</h2>
-  </div>
-  <div class="routes-list" id="routesList">
-    <div class="routes-empty">Loading routes…</div>
-  </div>
-</section>
-
-<section id="signup">
-  <div class="section-head">
-    <div class="eyebrow">Boarding starts here</div>
-    <h2>Get your seat on the list</h2>
-  </div>
-  <div class="form-wrap">
-    <div>
-      <form id="signupForm">
+      <form id="authForm">
         <div class="field">
-          <label for="name">Name</label>
-          <input id="name" type="text" placeholder="Jordan Reyes" required>
+          <label for="authEmail">Email</label>
+          <input id="authEmail" type="email" required placeholder="you@youruni.edu">
         </div>
         <div class="field">
-          <label for="email">School email</label>
-          <input id="email" type="email" placeholder="you@youruni.edu" required>
+          <label for="authPassword">Password</label>
+          <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters">
         </div>
-        <div class="row2">
-          <div class="field">
-            <label for="university">Your university</label>
-            <input id="university" type="text" list="uniOptions" placeholder="Penn State" required>
-            <datalist id="uniOptions">
-              <option value="Penn State">
-              <option value="NYU">
-              <option value="Boston University">
-              <option value="Universidad Complutense de Madrid">
-              <option value="Bocconi">
-              <option value="UCLA">
-            </datalist>
-          </div>
-          <div class="field">
-            <label for="destination">Where you're headed</label>
-            <input id="destination" type="text" list="destOptions" placeholder="Florence" required>
-            <datalist id="destOptions">
-              <option value="Madrid">
-              <option value="Barcelona">
-              <option value="Florence">
-              <option value="Rome">
-              <option value="Paris">
-              <option value="Berlin">
-              <option value="Singapore">
-              <option value="London">
-            </datalist>
-          </div>
-        </div>
-        <div class="row2">
-          <div class="field">
-            <label for="startDate">Arrival date</label>
-            <input id="startDate" type="date" required>
-          </div>
-          <div class="field">
-            <label for="endDate">Departure date</label>
-            <input id="endDate" type="date" required>
-          </div>
-        </div>
-        <div class="field">
-          <label for="worry">Biggest question right now (optional)</label>
-          <input id="worry" type="text" placeholder="e.g. how do I even find housing?">
-        </div>
-        <button type="submit" class="submit-btn" id="submitBtn">Generate my boarding pass</button>
-        <div class="error-msg" id="errorMsg">Something went wrong saving your spot — mind trying again?</div>
-        <div class="form-note">No spam. Just the group invite once your route has a handful of people.</div>
+        <button type="submit" class="btn-primary" id="authSubmitBtn" style="width:100%;">Log in</button>
+        <div class="error-msg" id="authError"></div>
       </form>
-      <div class="live-count" id="liveCount">Loading count…</div>
-    </div>
-
-    <div class="ticket-result" id="ticketResult">
-      <div class="pass-row">
-        <div>
-          <div class="pass-label">Passenger</div>
-          <div class="pass-value" id="ticketName">—</div>
-        </div>
-        <div class="stamp">CONFIRMED</div>
-      </div>
-      <div class="route">
-        <div class="code" id="ticketFrom">—</div>
-        <div class="path"></div>
-        <div class="code" id="ticketTo">—</div>
-      </div>
-      <div class="pass-grid">
-        <div>
-          <div class="pass-label">University</div>
-          <div class="pass-value" id="ticketUni" style="font-size:14px;">—</div>
-        </div>
-        <div>
-          <div class="pass-label">Destination</div>
-          <div class="pass-value" id="ticketDest" style="font-size:14px;">—</div>
-        </div>
-        <div>
-          <div class="pass-label">Seat No.</div>
-          <div class="pass-value" id="ticketSeat">—</div>
-        </div>
-      </div>
-      <div style="margin-top:14px;">
-        <div class="pass-label">Dates</div>
-        <div class="pass-value" id="ticketDates" style="font-size:14px;">—</div>
-      </div>
-      <div id="cohortBox" style="margin-top:20px;"></div>
     </div>
   </div>
-</section>
 
-<section id="community">
-  <div class="section-head">
-    <div class="eyebrow">Real people, real faces</div>
-    <h2>Meet who's actually going</h2>
-  </div>
-
-  <div id="authBox" class="community-panel">
-    <div class="auth-tabs">
-      <button type="button" class="auth-tab active" data-tab="signin">Log in</button>
-      <button type="button" class="auth-tab" data-tab="signup">Create account</button>
-    </div>
-    <form id="authForm">
-      <div class="field">
-        <label for="authEmail">Email</label>
-        <input id="authEmail" type="email" required placeholder="you@youruni.edu">
-      </div>
-      <div class="field">
-        <label for="authPassword">Password</label>
-        <input id="authPassword" type="password" required placeholder="At least 6 characters" minlength="6">
-      </div>
-      <button type="submit" class="btn-primary" id="authSubmitBtn" style="width:fit-content;">Log in</button>
-      <div class="error-msg" id="authError">Something went wrong.</div>
-    </form>
-  </div>
-
-  <div id="profileBox" class="community-panel" style="display:none;">
-    <p style="margin-bottom:16px; color:#4A5568; font-size:14.5px;">Set up your profile once — this is what other people heading to your destination will see.</p>
-    <form id="profileForm">
-      <div class="field">
-        <label for="avatarInput">Profile photo</label>
-        <input id="avatarInput" type="file" accept="image/*">
-      </div>
-      <div class="row2">
+  <!-- TICKET / PROFILE CREATION SCREEN -->
+  <div id="screenTicket" class="screen" style="display:none;">
+    <div class="wordmark-standalone">LAND<span>ED</span></div>
+    <div class="ticket-card-outer">
+      <p class="ticket-intro">One profile, one destination — this is your boarding pass into the community. Add a photo so people recognize you.</p>
+      <form id="profileForm">
         <div class="field">
-          <label for="pName">Name</label>
-          <input id="pName" type="text" required>
+          <label for="avatarInput">Profile photo</label>
+          <input id="avatarInput" type="file" accept="image/*">
         </div>
-        <div class="field">
-          <label for="pUniversity">University</label>
-          <input id="pUniversity" type="text" required>
-        </div>
-      </div>
-      <div class="row2">
-        <div class="field">
-          <label for="pDestination">Destination</label>
-          <input id="pDestination" type="text" required>
-        </div>
-        <div class="field">
-          <label>Dates</label>
-          <div style="display:flex; gap:8px;">
-            <input id="pStart" type="date" required>
-            <input id="pEnd" type="date" required>
+        <div class="row2">
+          <div class="field">
+            <label for="pName">Name</label>
+            <input id="pName" required>
+          </div>
+          <div class="field">
+            <label for="pUniversity">University</label>
+            <input id="pUniversity" required>
           </div>
         </div>
-      </div>
-      <div class="field">
-        <label for="pBio">About you</label>
-        <input id="pBio" type="text" placeholder="A line about you — interests, why you're going, whatever">
-      </div>
-      <button type="submit" class="btn-primary" id="profileSubmitBtn" style="width:fit-content;">Save profile</button>
-      <div class="error-msg" id="profileError">Couldn't save your profile — try again.</div>
-    </form>
+        <div class="row2">
+          <div class="field">
+            <label for="pDestination">Destination</label>
+            <input id="pDestination" required placeholder="Madrid">
+          </div>
+          <div class="field">
+            <label>Dates</label>
+            <div style="display:flex; gap:8px;">
+              <input id="pStart" type="date" required>
+              <input id="pEnd" type="date" required>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="pBio">About you</label>
+          <input id="pBio" placeholder="A line about you — interests, why you're going, whatever">
+        </div>
+        <button type="submit" class="btn-primary" id="profileSubmitBtn" style="width:100%;">Create my boarding pass</button>
+        <div class="error-msg" id="profileError"></div>
+      </form>
+    </div>
   </div>
 
-  <div id="directoryBox" style="display:none;">
-    <div class="section-head" style="margin-bottom:24px;">
-      <h3 style="font-family:var(--font-display); font-size:22px;">People heading to your destination</h3>
-    </div>
-    <div class="profile-grid" id="profileGrid"></div>
-
-    <div class="section-head" style="margin-top:48px; margin-bottom:20px;">
-      <h3 style="font-family:var(--font-display); font-size:22px;">Group chat for your destination</h3>
-    </div>
-    <div class="chat-window" id="groupChatWindow"></div>
-    <form id="groupChatForm" class="chat-input-row">
-      <input id="groupChatInput" type="text" placeholder="Say hi to your cohort…" required>
-      <button type="submit" class="btn-primary">Send</button>
-    </form>
-  </div>
-
-  <div class="chat-modal" id="chatModal" style="display:none;">
-    <div class="chat-modal-inner">
-      <div class="chat-modal-header">
-        <span id="chatModalName"></span>
-        <button type="button" id="chatModalClose">✕</button>
+  <!-- MAIN APP -->
+  <div id="screenMain" class="screen" style="align-items:stretch; display:none;">
+    <nav class="app-nav">
+      <div class="wordmark">LAND<span>ED</span></div>
+      <div class="app-tabs">
+        <button type="button" class="app-tab active" data-tab="communities">Your Community</button>
+        <button type="button" class="app-tab" data-tab="findpeople">Find People</button>
       </div>
-      <div class="chat-window" id="dmChatWindow"></div>
-      <form id="dmChatForm" class="chat-input-row">
-        <input id="dmChatInput" type="text" placeholder="Type a message…" required>
+      <button type="button" id="logoutBtn" class="btn-ghost">Log out</button>
+    </nav>
+
+    <div id="panelCommunities" class="app-panel">
+      <div class="mini-pass" id="miniPass"></div>
+
+      <h3 class="panel-heading">People heading to your destination</h3>
+      <div class="profile-grid" id="communityGrid"><div class="loading-note">Loading…</div></div>
+
+      <h3 class="panel-heading">Group chat</h3>
+      <div class="chat-window" id="groupChatWindow"></div>
+      <form id="groupChatForm" class="chat-input-row">
+        <input id="groupChatInput" type="text" placeholder="Say hi to your cohort…" required>
         <button type="submit" class="btn-primary">Send</button>
       </form>
     </div>
+
+    <div id="panelFindPeople" class="app-panel" style="display:none;">
+      <h3 class="panel-heading">Everyone on Landed</h3>
+      <div class="profile-grid" id="allProfilesGrid"><div class="loading-note">Loading…</div></div>
+    </div>
   </div>
-</section>
 
-<footer>
-  <div>Built by a student in Madrid, for anyone about to scatter across the world.</div>
-  <div>Landed — not affiliated with any university.</div>
-</footer>
+</div>
 
+<div class="chat-modal" id="chatModal" style="display:none;">
+  <div class="chat-modal-inner">
+    <div class="chat-modal-header">
+      <span id="chatModalName"></span>
+      <button type="button" id="chatModalClose">✕</button>
+    </div>
+    <div class="chat-window" id="dmChatWindow"></div>
+    <form id="dmChatForm" class="chat-input-row">
+      <input id="dmChatInput" type="text" placeholder="Type a message…" required>
+      <button type="submit" class="btn-primary">Send</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 (function(){
   const SUPABASE_URL = 'https://zsiwnivfmdnikqwslycv.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_Z0yKOoePcsR7InFWIuIcCg_vNOjlZjZ';
 
-  const form = document.getElementById('signupForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const errorMsg = document.getElementById('errorMsg');
-  const ticketResult = document.getElementById('ticketResult');
-  const liveCount = document.getElementById('liveCount');
-  const routesList = document.getElementById('routesList');
-  const uniInput = document.getElementById('university');
-  const destInput = document.getElementById('destination');
-  const heroFrom = document.getElementById('heroFrom');
-  const heroTo = document.getElementById('heroTo');
+  if(typeof supabase === 'undefined' || !supabase.createClient){
+    document.getElementById('loadError').textContent = 'Failed to load required scripts — check your internet connection and refresh.';
+    document.getElementById('loadError').classList.add('show');
+    return;
+  }
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentUser = null;
+  let currentProfile = null;
+  let activeDmUser = null;
+  let activeConversationId = null;
+  let groupChatInterval = null;
+  let dmChatInterval = null;
+
+  const screenAuth = document.getElementById('screenAuth');
+  const screenTicket = document.getElementById('screenTicket');
+  const screenMain = document.getElementById('screenMain');
+  const loadError = document.getElementById('loadError');
 
   function code(str, len){
     if(!str) return '???';
     const words = str.trim().split(/\s+/);
-    if(words.length > 1){
-      return words.map(w => w[0]).join('').toUpperCase().slice(0, len || 4);
-    }
+    if(words.length > 1){ return words.map(w => w[0]).join('').toUpperCase().slice(0, len || 4); }
     return str.trim().toUpperCase().slice(0, len || 3);
   }
-
-  uniInput.addEventListener('input', () => { heroFrom.textContent = uniInput.value ? code(uniInput.value, 4) : 'YOUR UNI'; });
-  destInput.addEventListener('input', () => { heroTo.textContent = destInput.value ? code(destInput.value, 3) : '???'; });
-
-  async function refreshAll(){
-    try{
-      const res = await fetch(SUPABASE_URL + '/rest/v1/route_counts?select=*', {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-        }
-      });
-      if(!res.ok){ throw new Error('fetch failed: ' + res.status); }
-      const rows = await res.json();
-
-      const total = rows.reduce((sum, r) => sum + Number(r.n || 0), 0);
-      liveCount.innerHTML = '<strong>' + total + '</strong> ' + (total === 1 ? 'person has' : 'people have') + ' claimed a seat so far';
-
-      const sorted = rows.slice().sort((a,b) => b.n - a.n).slice(0, 12);
-
-      if(sorted.length === 0){
-        routesList.innerHTML = '<div class="routes-empty">No routes yet — be the first to start one below.</div>';
-      } else {
-        routesList.innerHTML = sorted.map(r =>
-          '<div class="route-chip">' + r.university + ' → ' + r.destination + '<span class="n">' + r.n + '</span></div>'
-        ).join('');
-      }
-    }catch(e){
-      console.error('Supabase read error:', e);
-      liveCount.textContent = "Couldn't load the count right now.";
-      routesList.innerHTML = '<div class="routes-empty">Couldn\'t load routes right now.</div>';
-    }
-  }
-  refreshAll();
-
-  form.addEventListener('submit', async function(e){
-    e.preventDefault();
-    errorMsg.classList.remove('show');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Saving your seat…';
-
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const university = uniInput.value.trim();
-    const destination = destInput.value.trim();
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-    const worry = document.getElementById('worry').value.trim();
-
-    try{
-      const res = await fetch(SUPABASE_URL + '/rest/v1/signups', {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ name, email, university, destination, start_date: startDate, end_date: endDate, worry: worry || null })
-      });
-      if(!res.ok){ throw new Error('insert failed: ' + res.status); }
-
-      document.getElementById('ticketName').textContent = name;
-      document.getElementById('ticketFrom').textContent = code(university, 4);
-      document.getElementById('ticketTo').textContent = code(destination, 3);
-      document.getElementById('ticketUni').textContent = university;
-      document.getElementById('ticketDest').textContent = destination;
-      document.getElementById('ticketSeat').textContent = '#' + Math.floor(1000 + Math.random()*8999);
-      document.getElementById('ticketDates').textContent = formatDateRange(startDate, endDate);
-      ticketResult.classList.add('show');
-      form.reset();
-      heroFrom.textContent = 'YOUR UNI';
-      heroTo.textContent = '???';
-      refreshAll();
-      loadCohort(destination, name, university, startDate, endDate);
-    }catch(err){
-      console.error('Supabase write error:', err);
-      errorMsg.classList.add('show');
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Generate my boarding pass';
-    }
-  });
-
   function formatDateRange(start, end){
     const opts = { month: 'short', day: 'numeric' };
     try{
@@ -665,344 +348,297 @@
       return s + ' – ' + e;
     }catch(e){ return 'TBD'; }
   }
-
   function datesOverlap(aStart, aEnd, bStart, bEnd){
-    if(!aStart || !aEnd || !bStart || !bEnd) return true; // if either side is missing dates, don't exclude them
+    if(!aStart || !aEnd || !bStart || !bEnd) return true;
     return new Date(aStart) <= new Date(bEnd) && new Date(bStart) <= new Date(aEnd);
   }
+  function renderPassCard(profile){
+    return '<div class="pass"><div class="pass-main">' +
+      '<div class="pass-row"><div><div class="pass-label">Passenger</div><div class="pass-value">' + profile.name + '</div></div><div class="stamp">CONFIRMED</div></div>' +
+      '<div class="route"><div class="code">' + code(profile.university, 4) + '</div><div class="path"></div><div class="code">' + code(profile.destination, 3) + '</div></div>' +
+      '<div class="pass-grid">' +
+        '<div><div class="pass-label">University</div><div class="pass-value" style="font-size:13px;">' + profile.university + '</div></div>' +
+        '<div><div class="pass-label">Destination</div><div class="pass-value" style="font-size:13px;">' + profile.destination + '</div></div>' +
+        '<div><div class="pass-label">Dates</div><div class="pass-value" style="font-size:13px;">' + formatDateRange(profile.start_date, profile.end_date) + '</div></div>' +
+      '</div></div><div class="pass-stub"><div class="barcode">LANDED-2027</div><div class="stamp" style="transform:rotate(-4deg);">✈</div></div></div>';
+  }
 
-  async function loadCohort(destination, justSignedUpName, justSignedUpUni, myStart, myEnd){
-    const cohortBox = document.getElementById('cohortBox');
-    cohortBox.innerHTML = '<div class="cohort-loading">Looking for your cohort…</div>';
+  // ---------- AUTH ----------
+  const authTabs = document.querySelectorAll('.auth-tab');
+  const authForm = document.getElementById('authForm');
+  const authSubmitBtn = document.getElementById('authSubmitBtn');
+  const authError = document.getElementById('authError');
+  let authMode = 'signin';
+
+  authTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      authTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      authMode = tab.dataset.tab;
+      authSubmitBtn.textContent = authMode === 'signin' ? 'Log in' : 'Create account';
+      authError.classList.remove('show');
+    });
+  });
+
+  authForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    authError.classList.remove('show');
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    authSubmitBtn.disabled = true;
+    authSubmitBtn.textContent = authMode === 'signin' ? 'Logging in…' : 'Creating account…';
     try{
-      const url = SUPABASE_URL + '/rest/v1/public_signups?destination=ilike.' + encodeURIComponent(destination.trim()) + '&order=created_at.asc&limit=50';
-      const res = await fetch(url, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-        }
-      });
-      if(!res.ok){ throw new Error('cohort fetch failed: ' + res.status); }
-      let people = await res.json();
-
-      // Best-effort: drop the entry that's most likely the one we just created
-      let removed = false;
-      people = people.filter(p => {
-        if(!removed && p.name === justSignedUpName && p.university === justSignedUpUni){
-          removed = true;
-          return false;
-        }
-        return true;
-      });
-
-      // Keep only people whose dates overlap with mine
-      people = people.filter(p => datesOverlap(myStart, myEnd, p.start_date, p.end_date));
-
-      if(people.length === 0){
-        cohortBox.innerHTML = '<div class="cohort-heading">Your cohort</div><div class="cohort-empty">Nobody else with overlapping dates yet for this destination. Share your link — the next match will see you.</div>';
-        return;
+      const result = authMode === 'signin'
+        ? await sb.auth.signInWithPassword({ email, password })
+        : await sb.auth.signUp({ email, password });
+      if(result.error) throw result.error;
+      if(authMode === 'signup' && !result.data.session){
+        authError.textContent = 'Account created. Check your email to confirm it, then log in.';
+        authError.classList.add('show');
       }
-
-      const rows = people.slice(0, 8).map(p => {
-        const initial = (p.name || '?').trim().charAt(0).toUpperCase() || '?';
-        const dates = p.start_date && p.end_date ? formatDateRange(p.start_date, p.end_date) : 'Dates TBD';
-        return '<div class="cohort-person"><div class="cohort-avatar">' + initial + '</div><div><div class="cohort-name">' + p.name + ' <span style="font-weight:400;color:#8892A6;">— ' + p.university + '</span></div><div class="cohort-uni">' + dates + '</div></div></div>';
-      }).join('');
-
-      const extra = people.length > 8 ? '<div class="cohort-uni" style="margin-top:8px;">+' + (people.length - 8) + ' more</div>' : '';
-
-      cohortBox.innerHTML = '<div class="cohort-heading">' + people.length + ' other' + (people.length === 1 ? '' : 's') + ' heading to ' + destination + ' with overlapping dates</div>' + rows + extra;
-    }catch(e){
-      console.error('Cohort load error:', e);
-      cohortBox.innerHTML = '<div class="cohort-empty">Couldn\'t load your cohort right now — check the routes list above instead.</div>';
-    }
-  }
-})();
-</script>
-
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const SUPABASE_URL = 'https://zsiwnivfmdnikqwslycv.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Z0yKOoePcsR7InFWIuIcCg_vNOjlZjZ';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-let currentUser = null;
-let currentProfile = null;
-let activeDmUser = null;
-let activeConversationId = null;
-let groupChatInterval = null;
-let dmChatInterval = null;
-
-const authBox = document.getElementById('authBox');
-const profileBox = document.getElementById('profileBox');
-const directoryBox = document.getElementById('directoryBox');
-const authTabs = document.querySelectorAll('.auth-tab');
-const authForm = document.getElementById('authForm');
-const authSubmitBtn = document.getElementById('authSubmitBtn');
-const authError = document.getElementById('authError');
-let authMode = 'signin';
-
-authTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    authTabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    authMode = tab.dataset.tab;
-    authSubmitBtn.textContent = authMode === 'signin' ? 'Log in' : 'Create account';
-  });
-});
-
-authForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  authError.classList.remove('show');
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  authSubmitBtn.disabled = true;
-  try{
-    const { data, error } = authMode === 'signin'
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password });
-    if(error) throw error;
-    if(authMode === 'signup' && !data.session){
-      authError.textContent = 'Check your email to confirm your account, then log in.';
+      // onAuthStateChange below handles the redirect once a session exists
+    }catch(err){
+      console.error('Auth error:', err);
+      authError.textContent = err.message || 'Something went wrong.';
       authError.classList.add('show');
+    }finally{
+      authSubmitBtn.disabled = false;
+      authSubmitBtn.textContent = authMode === 'signin' ? 'Log in' : 'Create account';
     }
-  }catch(err){
-    console.error('Auth error:', err);
-    authError.textContent = err.message || 'Something went wrong.';
-    authError.classList.add('show');
-  }finally{
-    authSubmitBtn.disabled = false;
-  }
-});
+  });
 
-supabase.auth.onAuthStateChange((_event, session) => { handleSession(session); });
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await sb.auth.signOut();
+  });
 
-async function handleSession(session){
-  currentUser = session ? session.user : null;
-  if(!currentUser){
-    authBox.style.display = 'block';
-    profileBox.style.display = 'none';
-    directoryBox.style.display = 'none';
-    return;
-  }
-  authBox.style.display = 'none';
-  await loadOwnProfile();
-}
+  sb.auth.onAuthStateChange((_event, session) => { handleSession(session); });
 
-async function loadOwnProfile(){
-  const { data, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
-  if(error){ console.error('Load profile error:', error); return; }
-  currentProfile = data;
-  if(!currentProfile){
-    profileBox.style.display = 'block';
-    directoryBox.style.display = 'none';
-  } else {
-    profileBox.style.display = 'none';
-    directoryBox.style.display = 'block';
-    document.getElementById('pName').value = currentProfile.name || '';
-    document.getElementById('pUniversity').value = currentProfile.university || '';
-    document.getElementById('pDestination').value = currentProfile.destination || '';
-    document.getElementById('pStart').value = currentProfile.start_date || '';
-    document.getElementById('pEnd').value = currentProfile.end_date || '';
-    document.getElementById('pBio').value = currentProfile.bio || '';
-    loadDirectory();
-    startGroupChat();
-  }
-}
+  async function handleSession(session){
+    currentUser = session ? session.user : null;
+    if(groupChatInterval){ clearInterval(groupChatInterval); groupChatInterval = null; }
+    if(dmChatInterval){ clearInterval(dmChatInterval); dmChatInterval = null; }
 
-document.getElementById('profileForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const profileError = document.getElementById('profileError');
-  profileError.classList.remove('show');
-  const btn = document.getElementById('profileSubmitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-  try{
-    let avatarUrl = currentProfile ? currentProfile.avatar_url : null;
-    const file = document.getElementById('avatarInput').files[0];
-    if(file){
-      const path = currentUser.id + '/avatar-' + Date.now();
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
-      if(uploadError) throw uploadError;
-      const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path);
-      avatarUrl = urlData.publicUrl;
+    if(!currentUser){
+      screenAuth.style.display = 'flex';
+      screenTicket.style.display = 'none';
+      screenMain.style.display = 'none';
+      return;
     }
-
-    const profileData = {
-      id: currentUser.id,
-      name: document.getElementById('pName').value.trim(),
-      university: document.getElementById('pUniversity').value.trim(),
-      destination: document.getElementById('pDestination').value.trim(),
-      start_date: document.getElementById('pStart').value,
-      end_date: document.getElementById('pEnd').value,
-      bio: document.getElementById('pBio').value.trim(),
-      avatar_url: avatarUrl
-    };
-
-    const { error: upsertError } = await supabase.from('profiles').upsert(profileData);
-    if(upsertError) throw upsertError;
-
-    currentProfile = profileData;
-    profileBox.style.display = 'none';
-    directoryBox.style.display = 'block';
-    loadDirectory();
-    startGroupChat();
-  }catch(err){
-    console.error('Profile save error:', err);
-    profileError.textContent = err.message || 'Something went wrong.';
-    profileError.classList.add('show');
-  }finally{
-    btn.disabled = false;
-    btn.textContent = 'Save profile';
-  }
-});
-
-function datesOverlapProfiles(aStart, aEnd, bStart, bEnd){
-  if(!aStart || !aEnd || !bStart || !bEnd) return true;
-  return new Date(aStart) <= new Date(bEnd) && new Date(bStart) <= new Date(aEnd);
-}
-
-async function loadDirectory(){
-  const grid = document.getElementById('profileGrid');
-  grid.innerHTML = '<div class="cohort-loading">Loading…</div>';
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .ilike('destination', currentProfile.destination);
-  if(error){ grid.innerHTML = '<div class="cohort-empty">Couldn\'t load people right now.</div>'; return; }
-
-  const others = data.filter(p => p.id !== currentUser.id && datesOverlapProfiles(currentProfile.start_date, currentProfile.end_date, p.start_date, p.end_date));
-
-  if(others.length === 0){
-    grid.innerHTML = '<div class="cohort-empty">Nobody else here yet with matching dates. Check back soon, or share your link to bring more people.</div>';
-    return;
+    await loadOwnProfile();
   }
 
-  grid.innerHTML = others.map(p => {
-    const avatar = p.avatar_url
-      ? '<img src="' + p.avatar_url + '" class="avatar-img">'
-      : '<div class="avatar-fallback">' + (p.name || '?').charAt(0).toUpperCase() + '</div>';
-    return '<div class="profile-card">' +
-      avatar +
-      '<div class="profile-card-name">' + p.name + '</div>' +
-      '<div class="profile-card-uni">' + p.university + '</div>' +
-      (p.bio ? '<div class="profile-card-bio">' + p.bio + '</div>' : '') +
-      '<button type="button" class="profile-msg-btn" data-id="' + p.id + '" data-name="' + p.name.replace(/"/g,'&quot;') + '">Message</button>' +
-      '</div>';
-  }).join('');
-
-  grid.querySelectorAll('.profile-msg-btn').forEach(btn => {
-    btn.addEventListener('click', () => openDm(btn.dataset.id, btn.dataset.name));
-  });
-}
-
-function startGroupChat(){
-  loadGroupChat();
-  if(groupChatInterval) clearInterval(groupChatInterval);
-  groupChatInterval = setInterval(loadGroupChat, 4000);
-}
-
-async function loadGroupChat(){
-  const win = document.getElementById('groupChatWindow');
-  const { data, error } = await supabase
-    .from('destination_messages')
-    .select('*, profiles:sender_id(name)')
-    .ilike('destination', currentProfile.destination)
-    .order('created_at', { ascending: true })
-    .limit(100);
-  if(error){ console.error('Group chat load error:', error); return; }
-  win.innerHTML = data.map(m => renderBubble(m.profiles ? m.profiles.name : '?', m.content, m.sender_id === currentUser.id)).join('');
-  win.scrollTop = win.scrollHeight;
-}
-
-document.getElementById('groupChatForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const input = document.getElementById('groupChatInput');
-  const content = input.value.trim();
-  if(!content) return;
-  input.value = '';
-  const { error } = await supabase.from('destination_messages').insert({
-    destination: currentProfile.destination,
-    sender_id: currentUser.id,
-    content
-  });
-  if(error){ console.error('Group chat send error:', error); }
-  loadGroupChat();
-});
-
-async function openDm(otherId, otherName){
-  activeDmUser = { id: otherId, name: otherName };
-  document.getElementById('chatModalName').textContent = otherName;
-  document.getElementById('chatModal').style.display = 'flex';
-  await ensureConversation(otherId);
-  loadDmChat();
-  if(dmChatInterval) clearInterval(dmChatInterval);
-  dmChatInterval = setInterval(loadDmChat, 3000);
-}
-
-async function ensureConversation(otherId){
-  const userA = currentUser.id < otherId ? currentUser.id : otherId;
-  const userB = currentUser.id < otherId ? otherId : currentUser.id;
-  let { data, error } = await supabase
-    .from('conversations')
-    .select('*')
-    .eq('user_a', userA)
-    .eq('user_b', userB)
-    .maybeSingle();
-  if(error){ console.error('Find conversation error:', error); }
-  if(!data){
-    const { data: created, error: createError } = await supabase
-      .from('conversations')
-      .insert({ user_a: userA, user_b: userB })
-      .select()
-      .single();
-    if(createError){ console.error('Create conversation error:', createError); return; }
-    data = created;
+  async function loadOwnProfile(){
+    const { data, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    if(error){ console.error('Load profile error:', error); return; }
+    currentProfile = data;
+    if(!currentProfile){
+      screenAuth.style.display = 'none';
+      screenTicket.style.display = 'flex';
+      screenMain.style.display = 'none';
+    }else{
+      screenAuth.style.display = 'none';
+      screenTicket.style.display = 'none';
+      screenMain.style.display = 'flex';
+      document.getElementById('miniPass').innerHTML = renderPassCard(currentProfile);
+      loadCommunity();
+      loadAllProfiles();
+      startGroupChat();
+    }
   }
-  activeConversationId = data.id;
-}
 
-async function loadDmChat(){
-  if(!activeConversationId) return;
-  const win = document.getElementById('dmChatWindow');
-  const { data, error } = await supabase
-    .from('messages')
-    .select('*')
-    .eq('conversation_id', activeConversationId)
-    .order('created_at', { ascending: true })
-    .limit(200);
-  if(error){ console.error('DM load error:', error); return; }
-  win.innerHTML = data.map(m => renderBubble(m.sender_id === currentUser.id ? 'You' : activeDmUser.name, m.content, m.sender_id === currentUser.id)).join('');
-  win.scrollTop = win.scrollHeight;
-}
+  // ---------- PROFILE / TICKET CREATION ----------
+  document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const profileError = document.getElementById('profileError');
+    profileError.classList.remove('show');
+    const btn = document.getElementById('profileSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try{
+      let avatarUrl = null;
+      const file = document.getElementById('avatarInput').files[0];
+      if(file){
+        const path = currentUser.id + '/avatar-' + Date.now();
+        const { error: uploadError } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
+        if(uploadError) throw uploadError;
+        const { data: urlData } = sb.storage.from('avatars').getPublicUrl(path);
+        avatarUrl = urlData.publicUrl;
+      }
+      const profileData = {
+        id: currentUser.id,
+        name: document.getElementById('pName').value.trim(),
+        university: document.getElementById('pUniversity').value.trim(),
+        destination: document.getElementById('pDestination').value.trim(),
+        start_date: document.getElementById('pStart').value,
+        end_date: document.getElementById('pEnd').value,
+        bio: document.getElementById('pBio').value.trim(),
+        avatar_url: avatarUrl
+      };
+      const { error: upsertError } = await sb.from('profiles').upsert(profileData);
+      if(upsertError) throw upsertError;
 
-document.getElementById('dmChatForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const input = document.getElementById('dmChatInput');
-  const content = input.value.trim();
-  if(!content || !activeConversationId) return;
-  input.value = '';
-  const { error } = await supabase.from('messages').insert({
-    conversation_id: activeConversationId,
-    sender_id: currentUser.id,
-    content
+      currentProfile = profileData;
+      screenTicket.style.display = 'none';
+      screenMain.style.display = 'flex';
+      document.getElementById('miniPass').innerHTML = renderPassCard(currentProfile);
+      loadCommunity();
+      loadAllProfiles();
+      startGroupChat();
+    }catch(err){
+      console.error('Profile save error:', err);
+      profileError.textContent = err.message || 'Something went wrong.';
+      profileError.classList.add('show');
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Create my boarding pass';
+    }
   });
-  if(error){ console.error('DM send error:', error); }
-  loadDmChat();
-});
 
-document.getElementById('chatModalClose').addEventListener('click', () => {
-  document.getElementById('chatModal').style.display = 'none';
-  if(dmChatInterval) clearInterval(dmChatInterval);
-});
+  // ---------- APP TABS ----------
+  document.querySelectorAll('.app-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const isCommunities = tab.dataset.tab === 'communities';
+      document.getElementById('panelCommunities').style.display = isCommunities ? 'block' : 'none';
+      document.getElementById('panelFindPeople').style.display = isCommunities ? 'none' : 'block';
+    });
+  });
 
-function renderBubble(name, content, isMine){
-  const safe = content.replace(/</g,'&lt;');
-  return '<div class="msg-bubble ' + (isMine ? 'mine' : '') + '"><div class="msg-author">' + (isMine ? 'You' : name) + '</div><div class="msg-content">' + safe + '</div></div>';
-}
+  // ---------- YOUR COMMUNITY: matches ----------
+  async function loadCommunity(){
+    const grid = document.getElementById('communityGrid');
+    grid.innerHTML = '<div class="loading-note">Loading…</div>';
+    const { data, error } = await sb.from('profiles').select('*').ilike('destination', currentProfile.destination);
+    if(error){ grid.innerHTML = '<div class="empty-note">Couldn\'t load people right now.</div>'; return; }
+    const others = data.filter(p => p.id !== currentUser.id && datesOverlap(currentProfile.start_date, currentProfile.end_date, p.start_date, p.end_date));
+    renderProfileGrid(grid, others, 'Nobody else here yet with matching dates. Share your link to bring more people.');
+  }
 
-supabase.auth.getSession().then(({ data }) => handleSession(data.session));
+  // ---------- FIND PEOPLE: everyone ----------
+  async function loadAllProfiles(){
+    const grid = document.getElementById('allProfilesGrid');
+    grid.innerHTML = '<div class="loading-note">Loading…</div>';
+    const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(100);
+    if(error){ grid.innerHTML = '<div class="empty-note">Couldn\'t load people right now.</div>'; return; }
+    const others = data.filter(p => p.id !== currentUser.id);
+    renderProfileGrid(grid, others, 'Nobody else has joined yet — be the first to spread the word.');
+  }
+
+  function renderProfileGrid(grid, people, emptyText){
+    if(people.length === 0){
+      grid.innerHTML = '<div class="empty-note">' + emptyText + '</div>';
+      return;
+    }
+    grid.innerHTML = people.map(p => {
+      const avatar = p.avatar_url
+        ? '<img src="' + p.avatar_url + '" class="avatar-img">'
+        : '<div class="avatar-fallback">' + (p.name || '?').charAt(0).toUpperCase() + '</div>';
+      return '<div class="profile-card">' + avatar +
+        '<div class="profile-card-name">' + p.name + '</div>' +
+        '<div class="profile-card-uni">' + p.university + '</div>' +
+        '<div class="profile-card-dest">→ ' + p.destination + '</div>' +
+        (p.bio ? '<div class="profile-card-bio">' + p.bio + '</div>' : '') +
+        '<button type="button" class="profile-msg-btn" data-id="' + p.id + '" data-name="' + p.name.replace(/"/g,'&quot;') + '">Message</button>' +
+        '</div>';
+    }).join('');
+    grid.querySelectorAll('.profile-msg-btn').forEach(btn => {
+      btn.addEventListener('click', () => openDm(btn.dataset.id, btn.dataset.name));
+    });
+  }
+
+  // ---------- GROUP CHAT ----------
+  function startGroupChat(){
+    loadGroupChat();
+    if(groupChatInterval) clearInterval(groupChatInterval);
+    groupChatInterval = setInterval(loadGroupChat, 4000);
+  }
+  async function loadGroupChat(){
+    const win = document.getElementById('groupChatWindow');
+    const { data, error } = await sb.from('destination_messages')
+      .select('*, profiles:sender_id(name)')
+      .ilike('destination', currentProfile.destination)
+      .order('created_at', { ascending: true }).limit(100);
+    if(error){ console.error('Group chat load error:', error); return; }
+    win.innerHTML = data.map(m => renderBubble(m.profiles ? m.profiles.name : '?', m.content, m.sender_id === currentUser.id)).join('');
+    win.scrollTop = win.scrollHeight;
+  }
+  document.getElementById('groupChatForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('groupChatInput');
+    const content = input.value.trim();
+    if(!content) return;
+    input.value = '';
+    const { error } = await sb.from('destination_messages').insert({
+      destination: currentProfile.destination, sender_id: currentUser.id, content
+    });
+    if(error) console.error('Group chat send error:', error);
+    loadGroupChat();
+  });
+
+  // ---------- 1:1 CHAT ----------
+  async function openDm(otherId, otherName){
+    activeDmUser = { id: otherId, name: otherName };
+    document.getElementById('chatModalName').textContent = otherName;
+    document.getElementById('chatModal').style.display = 'flex';
+    await ensureConversation(otherId);
+    loadDmChat();
+    if(dmChatInterval) clearInterval(dmChatInterval);
+    dmChatInterval = setInterval(loadDmChat, 3000);
+  }
+  async function ensureConversation(otherId){
+    const userA = currentUser.id < otherId ? currentUser.id : otherId;
+    const userB = currentUser.id < otherId ? otherId : currentUser.id;
+    let { data, error } = await sb.from('conversations').select('*').eq('user_a', userA).eq('user_b', userB).maybeSingle();
+    if(error) console.error('Find conversation error:', error);
+    if(!data){
+      const { data: created, error: createError } = await sb.from('conversations').insert({ user_a: userA, user_b: userB }).select().single();
+      if(createError){ console.error('Create conversation error:', createError); return; }
+      data = created;
+    }
+    activeConversationId = data.id;
+  }
+  async function loadDmChat(){
+    if(!activeConversationId) return;
+    const win = document.getElementById('dmChatWindow');
+    const { data, error } = await sb.from('messages').select('*').eq('conversation_id', activeConversationId).order('created_at', { ascending: true }).limit(200);
+    if(error){ console.error('DM load error:', error); return; }
+    win.innerHTML = data.map(m => renderBubble(m.sender_id === currentUser.id ? 'You' : activeDmUser.name, m.content, m.sender_id === currentUser.id)).join('');
+    win.scrollTop = win.scrollHeight;
+  }
+  document.getElementById('dmChatForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('dmChatInput');
+    const content = input.value.trim();
+    if(!content || !activeConversationId) return;
+    input.value = '';
+    const { error } = await sb.from('messages').insert({ conversation_id: activeConversationId, sender_id: currentUser.id, content });
+    if(error) console.error('DM send error:', error);
+    loadDmChat();
+  });
+  document.getElementById('chatModalClose').addEventListener('click', () => {
+    document.getElementById('chatModal').style.display = 'none';
+    if(dmChatInterval) clearInterval(dmChatInterval);
+  });
+
+  function renderBubble(name, content, isMine){
+    const safe = content.replace(/</g,'&lt;');
+    return '<div class="msg-bubble ' + (isMine ? 'mine' : '') + '"><div class="msg-author">' + (isMine ? 'You' : name) + '</div><div class="msg-content">' + safe + '</div></div>';
+  }
+
+  // ---------- INIT ----------
+  sb.auth.getSession().then(({ data, error }) => {
+    if(error){
+      loadError.textContent = 'Failed to check your session — try refreshing.';
+      loadError.classList.add('show');
+    }
+    handleSession(data.session);
+  }).catch(err => {
+    console.error('Init error:', err);
+    loadError.textContent = 'Failed to connect — try refreshing the page.';
+    loadError.classList.add('show');
+  });
+})();
 </script>
 
 </body>
