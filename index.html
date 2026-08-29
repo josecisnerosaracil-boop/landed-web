@@ -185,6 +185,44 @@
   }
   .top-error.show{ display:block; }
 
+  /* Auth screen: two-column marketing + form */
+  .auth-screen{ padding:0; align-items:stretch; min-height:100vh; }
+  .auth-layout{ display:grid; grid-template-columns:1.15fr 1fr; width:100%; min-height:100vh; }
+  .auth-marketing{
+    background:var(--ink); color:var(--paper); padding:6vw 5vw;
+    display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden;
+  }
+  .auth-marketing::before{
+    content:''; position:absolute; top:-20%; right:-10%; width:60%; height:60%;
+    background:radial-gradient(circle, rgba(31,156,130,0.25), transparent 70%);
+    pointer-events:none;
+  }
+  .auth-marketing .wordmark-standalone{ margin-bottom:32px; }
+  .auth-headline{
+    font-family:var(--font-display); font-weight:600; font-size:clamp(30px, 3.4vw, 44px);
+    line-height:1.08; letter-spacing:-0.01em; margin-bottom:18px; max-width:14ch;
+  }
+  .auth-headline em{ font-style:italic; color:var(--teal); }
+  .auth-sub{ font-size:16px; color:#B9C2D6; max-width:38ch; margin-bottom:32px; }
+  .auth-bullets{ list-style:none; display:flex; flex-direction:column; gap:16px; margin-bottom:40px; }
+  .auth-bullets li{ display:flex; align-items:flex-start; gap:14px; font-size:14.5px; color:#DCE2EE; max-width:36ch; }
+  .bullet-num{
+    flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--teal); color:#08251E;
+    font-family:var(--font-mono); font-weight:600; font-size:12px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .auth-mini-pass{ max-width:300px; opacity:0.95; transform:rotate(-3deg); }
+  .auth-mini-pass .pass{ box-shadow:0 25px 60px -20px rgba(0,0,0,0.5); }
+
+  .auth-card-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6vw 5vw; }
+
+  @media (max-width:900px){
+    .auth-layout{ grid-template-columns:1fr; }
+    .auth-marketing{ padding:12vw 8vw 8vw; }
+    .auth-mini-pass{ display:none; }
+    .auth-card-wrap{ padding:8vw 8vw 12vw; }
+  }
+
   @media (max-width:640px){
     .row2{ grid-template-columns:1fr; }
     .auth-card, .ticket-card-outer{ padding:26px; }
@@ -196,26 +234,57 @@
 <div id="app">
 
   <!-- AUTH SCREEN -->
-  <div id="screenAuth" class="screen">
-    <div class="wordmark-standalone">LAND<span>ED</span></div>
-    <div class="top-error" id="loadError">Couldn't connect right now — try refreshing the page.</div>
-    <div class="auth-card">
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab active" data-tab="signin">Log in</button>
-        <button type="button" class="auth-tab" data-tab="signup">Create account</button>
+  <div id="screenAuth" class="screen auth-screen">
+    <div class="auth-layout">
+      <div class="auth-marketing">
+        <div class="wordmark-standalone">LAND<span>ED</span></div>
+        <h1 class="auth-headline">Don't land abroad <em>knowing no one.</em></h1>
+        <p class="auth-sub">Landed connects you with people from any university, heading to your exact destination — before you even board.</p>
+        <ul class="auth-bullets">
+          <li><span class="bullet-num">1</span> Create your profile — photo, university, dates</li>
+          <li><span class="bullet-num">2</span> We match you with people going to the same place, same time</li>
+          <li><span class="bullet-num">3</span> Chat with them and land already knowing your people</li>
+        </ul>
+        <div class="auth-mini-pass">
+          <div class="pass">
+            <div class="pass-main">
+              <div class="pass-row">
+                <div><div class="pass-label">Passenger</div><div class="pass-value">You, soon</div></div>
+                <div class="stamp">PENDING</div>
+              </div>
+              <div class="route"><div class="code">YOU</div><div class="path"></div><div class="code">???</div></div>
+              <div class="pass-grid">
+                <div><div class="pass-label">Term</div><div class="pass-value">TBD</div></div>
+                <div><div class="pass-label">Status</div><div class="pass-value">Solo</div></div>
+                <div><div class="pass-label">Seat</div><div class="pass-value">?</div></div>
+              </div>
+            </div>
+            <div class="pass-stub"><div class="barcode">LANDED-2027</div><div class="stamp" style="transform:rotate(-4deg);">✈</div></div>
+          </div>
+        </div>
       </div>
-      <form id="authForm">
-        <div class="field">
-          <label for="authEmail">Email</label>
-          <input id="authEmail" type="email" required placeholder="you@youruni.edu">
+
+      <div class="auth-card-wrap">
+        <div class="top-error" id="loadError">Couldn't connect right now — try refreshing the page.</div>
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" data-tab="signin">Log in</button>
+            <button type="button" class="auth-tab" data-tab="signup">Create account</button>
+          </div>
+          <form id="authForm">
+            <div class="field">
+              <label for="authEmail">Email</label>
+              <input id="authEmail" type="email" required placeholder="you@youruni.edu">
+            </div>
+            <div class="field">
+              <label for="authPassword">Password</label>
+              <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters">
+            </div>
+            <button type="submit" class="btn-primary" id="authSubmitBtn" style="width:100%;">Log in</button>
+            <div class="error-msg" id="authError"></div>
+          </form>
         </div>
-        <div class="field">
-          <label for="authPassword">Password</label>
-          <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters">
-        </div>
-        <button type="submit" class="btn-primary" id="authSubmitBtn" style="width:100%;">Log in</button>
-        <div class="error-msg" id="authError"></div>
-      </form>
+      </div>
     </div>
   </div>
 
