@@ -261,6 +261,66 @@
     0%{ transform:translateY(0) rotate(0deg); opacity:1; }
     100%{ transform:translateY(105vh) rotate(540deg); opacity:0; }
   }
+
+  /* Find People: TikTok/Reels-style vertical swipe feed */
+  .swipe-shell{ display:flex; justify-content:center; }
+  .swipe-feed{
+    width:100%; max-width:420px; height:min(78vh, 720px);
+    border-radius:32px; overflow-y:scroll; scroll-snap-type:y mandatory;
+    box-shadow:0 30px 70px -25px rgba(22,33,62,0.4); background:var(--ink);
+    scrollbar-width:none;
+  }
+  .swipe-feed::-webkit-scrollbar{ display:none; }
+  .swipe-card{
+    height:100%; scroll-snap-align:start; scroll-snap-stop:always; position:relative;
+    overflow:hidden; display:flex; align-items:flex-end;
+  }
+  .swipe-card-bg{
+    position:absolute; inset:0; background-size:cover; background-position:center;
+  }
+  .swipe-card-bg.no-photo{ background:var(--gradient-sunset); }
+  .swipe-card-fallback-initial{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:120px; font-weight:600; color:rgba(255,255,255,0.35);
+  }
+  .swipe-card-shade{
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(10,15,30,0.92) 0%, rgba(10,15,30,0.55) 32%, transparent 62%);
+  }
+  .swipe-card-info{ position:relative; padding:26px 88px 30px 24px; color:#fff; width:100%; }
+  .swipe-card-name{
+    font-family:var(--font-display); font-size:26px; font-weight:600;
+    font-variation-settings:'SOFT' 50, 'WONK' 1; margin-bottom:8px; line-height:1.05;
+  }
+  .swipe-card-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .swipe-card-tag{
+    font-family:var(--font-mono); font-size:11px; font-weight:600; padding:5px 12px;
+    border-radius:999px; background:rgba(255,255,255,0.16); backdrop-filter:blur(4px);
+  }
+  .swipe-card-tag.dest{ background:var(--coral); }
+  .swipe-card-bio{ font-size:14px; color:rgba(255,255,255,0.9); max-width:26ch; }
+  .swipe-card-actions{
+    position:absolute; right:14px; bottom:110px; display:flex; flex-direction:column; gap:18px; align-items:center;
+  }
+  .swipe-action-btn{
+    width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
+    background:rgba(255,255,255,0.16); backdrop-filter:blur(6px); color:#fff; font-size:22px;
+    display:flex; align-items:center; justify-content:center; transition:transform .15s ease, background .15s ease;
+  }
+  .swipe-action-btn:hover{ transform:scale(1.08); }
+  .swipe-action-btn.liked{ background:var(--coral); }
+  .swipe-action-btn.msg{ background:var(--coral); }
+  .swipe-hint{
+    position:absolute; top:20px; left:50%; transform:translateX(-50%);
+    font-family:var(--font-mono); font-size:11px; color:rgba(255,255,255,0.75);
+    background:rgba(0,0,0,0.3); padding:6px 14px; border-radius:999px; backdrop-filter:blur(4px);
+    animation:hintPulse 2s ease-in-out infinite;
+  }
+  @keyframes hintPulse{ 0%,100%{ opacity:0.6; } 50%{ opacity:1; } }
+  .swipe-empty-card{
+    height:100%; scroll-snap-align:start; display:flex; align-items:center; justify-content:center;
+    color:#fff; text-align:center; padding:40px; font-family:var(--font-mono); font-size:13px; background:var(--ink);
+  }
 </style>
 </head>
 <body>
@@ -392,7 +452,9 @@
 
     <div id="panelFindPeople" class="app-panel" style="display:none;">
       <h3 class="panel-heading">Everyone on Landed</h3>
-      <div class="profile-grid" id="allProfilesGrid"><div class="loading-note">Loading…</div></div>
+      <div class="swipe-shell">
+        <div class="swipe-feed" id="swipeFeed"><div class="swipe-empty-card">Loading…</div></div>
+      </div>
     </div>
   </div>
 
@@ -623,12 +685,46 @@
 
   // ---------- FIND PEOPLE: everyone ----------
   async function loadAllProfiles(){
-    const grid = document.getElementById('allProfilesGrid');
-    grid.innerHTML = '<div class="loading-note">Loading…</div>';
+    const feed = document.getElementById('swipeFeed');
+    feed.innerHTML = '<div class="swipe-empty-card">Loading…</div>';
     const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(100);
-    if(error){ grid.innerHTML = '<div class="empty-note">Couldn\'t load people right now.</div>'; return; }
+    if(error){ feed.innerHTML = '<div class="swipe-empty-card">Couldn\'t load people right now.</div>'; return; }
     const others = data.filter(p => p.id !== currentUser.id);
-    renderProfileGrid(grid, others, 'Nobody else has joined yet — be the first to spread the word.');
+    renderSwipeFeed(feed, others);
+  }
+
+  function renderSwipeFeed(feed, people){
+    if(people.length === 0){
+      feed.innerHTML = '<div class="swipe-empty-card">Nobody has joined yet — be the first to spread the word, then check back here.</div>';
+      return;
+    }
+    feed.innerHTML = people.map((p, i) => {
+      const bg = p.avatar_url
+        ? '<div class="swipe-card-bg" style="background-image:url(\'' + p.avatar_url + '\');"></div>'
+        : '<div class="swipe-card-bg no-photo"></div><div class="swipe-card-fallback-initial">' + (p.name || '?').charAt(0).toUpperCase() + '</div>';
+      const hint = i === 0 ? '<div class="swipe-hint">↑ swipe for more people</div>' : '';
+      return '<div class="swipe-card">' + bg + '<div class="swipe-card-shade"></div>' + hint +
+        '<div class="swipe-card-actions">' +
+          '<button type="button" class="swipe-action-btn like-btn" data-id="' + p.id + '">♥</button>' +
+          '<button type="button" class="swipe-action-btn msg" data-id="' + p.id + '" data-name="' + p.name.replace(/"/g,'&quot;') + '">✉</button>' +
+        '</div>' +
+        '<div class="swipe-card-info">' +
+          '<div class="swipe-card-name">' + p.name + '</div>' +
+          '<div class="swipe-card-tags"><span class="swipe-card-tag">' + p.university + '</span><span class="swipe-card-tag dest">→ ' + p.destination + '</span></div>' +
+          (p.bio ? '<div class="swipe-card-bio">' + p.bio + '</div>' : '') +
+        '</div></div>';
+    }).join('') + '<div class="swipe-empty-card">That\'s everyone for now — check back soon 👋</div>';
+
+    feed.querySelectorAll('.msg').forEach(btn => {
+      btn.addEventListener('click', () => openDm(btn.dataset.id, btn.dataset.name));
+    });
+    feed.querySelectorAll('.like-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('liked');
+        btn.style.transform = 'scale(1.25)';
+        setTimeout(() => { btn.style.transform = ''; }, 180);
+      });
+    });
   }
 
   function renderProfileGrid(grid, people, emptyText){
