@@ -215,25 +215,50 @@
   .auth-marketing::before{
     content:''; position:absolute; top:-30%; right:-15%; width:75%; height:75%;
     background:var(--gradient-sunset); opacity:0.35; filter:blur(60px);
-    pointer-events:none;
+    pointer-events:none; animation:blobDrift 14s ease-in-out infinite;
   }
-  .auth-marketing .wordmark-standalone{ margin-bottom:32px; }
+  @keyframes blobDrift{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-6%,8%) scale(1.15); }
+  }
+  .float-deco{
+    position:absolute; font-size:28px; opacity:0.22; pointer-events:none; filter:blur(0.3px);
+    animation:floatDeco 7s ease-in-out infinite;
+  }
+  .float-deco.d1{ top:12%; left:6%; animation-delay:0s; font-size:34px; }
+  .float-deco.d2{ top:68%; left:10%; animation-delay:1.5s; font-size:22px; }
+  .float-deco.d3{ top:24%; left:82%; animation-delay:0.8s; font-size:26px; }
+  .float-deco.d4{ top:78%; left:78%; animation-delay:2.3s; font-size:30px; }
+  @keyframes floatDeco{
+    0%,100%{ transform:translateY(0) rotate(-4deg); }
+    50%{ transform:translateY(-18px) rotate(6deg); }
+  }
+  .auth-marketing .wordmark-standalone{ margin-bottom:32px; position:relative; opacity:0; animation:fadeUp .6s ease forwards; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
   .auth-headline{
     font-family:var(--font-display); font-weight:600; font-size:clamp(38px, 4.6vw, 60px);
     font-variation-settings:'SOFT' 60, 'WONK' 1; line-height:1.02; letter-spacing:-0.02em;
     margin-bottom:20px; max-width:13ch; position:relative;
+    opacity:0; animation:fadeUp .6s ease .1s forwards;
   }
   .auth-headline em{ font-style:italic; background:var(--gradient-sunset); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .auth-sub{ font-size:16px; color:#B9C2D6; max-width:38ch; margin-bottom:32px; position:relative; }
-  .auth-bullets{ list-style:none; display:flex; flex-direction:column; gap:16px; margin-bottom:40px; position:relative; }
+  .auth-sub{ font-size:16px; color:#B9C2D6; max-width:38ch; margin-bottom:32px; position:relative; opacity:0; animation:fadeUp .6s ease .22s forwards; }
+  .auth-bullets{ list-style:none; display:flex; flex-direction:column; gap:16px; margin-bottom:40px; position:relative; opacity:0; animation:fadeUp .6s ease .34s forwards; }
   .auth-bullets li{ display:flex; align-items:flex-start; gap:14px; font-size:14.5px; color:#DCE2EE; max-width:36ch; }
   .bullet-num{
     flex-shrink:0; width:28px; height:28px; border-radius:50%; background:var(--coral); color:#fff;
     font-family:var(--font-mono); font-weight:700; font-size:12px;
     display:flex; align-items:center; justify-content:center;
   }
-  .auth-mini-pass{ max-width:300px; opacity:0.97; transform:rotate(-3deg); position:relative; }
-  .auth-mini-pass .pass{ box-shadow:0 25px 60px -20px rgba(0,0,0,0.5); }
+  .auth-mini-pass{
+    max-width:300px; position:relative; perspective:800px;
+    opacity:0; animation:fadeUp .6s ease .46s forwards;
+  }
+  .auth-mini-pass .pass{
+    box-shadow:0 25px 60px -20px rgba(0,0,0,0.5);
+    transform:rotate(-3deg); transition:transform .15s ease-out;
+    transform-style:preserve-3d;
+  }
 
   .auth-card-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6vw 5vw; }
 
@@ -330,7 +355,11 @@
   <!-- AUTH SCREEN -->
   <div id="screenAuth" class="screen auth-screen">
     <div class="auth-layout">
-      <div class="auth-marketing">
+      <div class="auth-marketing" id="authMarketing">
+        <span class="float-deco d1">✈️</span>
+        <span class="float-deco d2">🧳</span>
+        <span class="float-deco d3">🌍</span>
+        <span class="float-deco d4">📍</span>
         <div class="wordmark-standalone">LAND<span>ED</span></div>
         <h1 class="auth-headline">Don't land abroad <em>knowing no one.</em></h1>
         <p class="auth-sub">Landed connects you with people from any university, heading to your exact destination — before you even board.</p>
@@ -831,6 +860,21 @@
     document.getElementById('chatModal').style.display = 'none';
     if(dmChatInterval) clearInterval(dmChatInterval);
   });
+
+  // Interactive tilt on the decorative boarding pass (auth screen)
+  const authMarketing = document.getElementById('authMarketing');
+  const miniPassEl = document.querySelector('.auth-mini-pass .pass');
+  if(authMarketing && miniPassEl){
+    authMarketing.addEventListener('mousemove', (e) => {
+      const rect = authMarketing.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      miniPassEl.style.transform = 'rotate(-3deg) rotateY(' + (x * 14) + 'deg) rotateX(' + (-y * 10) + 'deg)';
+    });
+    authMarketing.addEventListener('mouseleave', () => {
+      miniPassEl.style.transform = 'rotate(-3deg) rotateY(0deg) rotateX(0deg)';
+    });
+  }
 
   function fireConfetti(){
     const layer = document.getElementById('confettiLayer');
