@@ -173,6 +173,15 @@
   }
   .loading-note{ font-family:var(--font-mono); font-size:12px; color:#8892A6; }
 
+  .convo-row{
+    display:flex; align-items:center; gap:14px; background:var(--paper-2); border:1.5px solid var(--line-soft);
+    border-radius:16px; padding:14px 16px; margin-bottom:10px; cursor:pointer; transition:transform .15s ease;
+  }
+  .convo-row:hover{ transform:translateX(4px); border-color:var(--coral); }
+  .convo-name{ font-family:var(--font-display); font-weight:600; font-size:15px; font-variation-settings:'SOFT' 40; }
+  .convo-uni{ font-family:var(--font-mono); font-size:11px; color:#9A8F79; font-weight:400; }
+  .convo-preview{ font-size:13px; color:#5A5347; margin-top:2px; }
+
   .chat-window{
     background:var(--paper-2); border:1.5px solid var(--line-soft); border-radius:18px;
     padding:16px; height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
@@ -328,13 +337,12 @@
     position:absolute; right:14px; bottom:110px; display:flex; flex-direction:column; gap:18px; align-items:center;
   }
   .swipe-action-btn{
-    width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
-    background:rgba(255,255,255,0.16); backdrop-filter:blur(6px); color:#fff; font-size:22px;
+    width:56px; height:56px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--coral); backdrop-filter:blur(6px); color:#fff; font-size:24px;
     display:flex; align-items:center; justify-content:center; transition:transform .15s ease, background .15s ease;
+    box-shadow:0 6px 16px -4px rgba(255,107,74,0.6);
   }
   .swipe-action-btn:hover{ transform:scale(1.08); }
-  .swipe-action-btn.liked{ background:var(--coral); }
-  .swipe-action-btn.msg{ background:var(--coral); }
   .swipe-hint{
     position:absolute; top:20px; left:50%; transform:translateX(-50%);
     font-family:var(--font-mono); font-size:11px; color:rgba(255,255,255,0.75);
@@ -461,6 +469,7 @@
       <div class="app-tabs">
         <button type="button" class="app-tab active" data-tab="communities">Your Community</button>
         <button type="button" class="app-tab" data-tab="findpeople">Find People</button>
+        <button type="button" class="app-tab" data-tab="messages">Messages</button>
       </div>
       <button type="button" id="logoutBtn" class="btn-ghost">Log out</button>
     </nav>
@@ -485,6 +494,11 @@
         <div class="swipe-feed" id="swipeFeed"><div class="swipe-empty-card">Loading…</div></div>
       </div>
     </div>
+
+    <div id="panelMessages" class="app-panel" style="display:none; max-width:520px;">
+      <h3 class="panel-heading">Your conversations</h3>
+      <div id="conversationsList"><div class="loading-note">Loading…</div></div>
+    </div>
   </div>
 
 </div>
@@ -496,6 +510,7 @@
       <button type="button" id="chatModalClose">✕</button>
     </div>
     <div class="chat-window" id="dmChatWindow"></div>
+    <div class="error-msg" id="dmChatError" style="margin-bottom:6px;"></div>
     <form id="dmChatForm" class="chat-input-row">
       <input id="dmChatInput" type="text" placeholder="Type a message…" required>
       <button type="submit" class="btn-primary">Send</button>
@@ -639,6 +654,7 @@
       loadCommunity();
       loadAllProfiles();
       startGroupChat();
+      loadConversations();
     }
   }
 
@@ -680,6 +696,7 @@
       loadCommunity();
       loadAllProfiles();
       startGroupChat();
+      loadConversations();
       fireConfetti();
     }catch(err){
       console.error('Profile save error:', err);
@@ -696,9 +713,11 @@
     tab.addEventListener('click', () => {
       document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      const isCommunities = tab.dataset.tab === 'communities';
-      document.getElementById('panelCommunities').style.display = isCommunities ? 'block' : 'none';
-      document.getElementById('panelFindPeople').style.display = isCommunities ? 'none' : 'block';
+      const which = tab.dataset.tab;
+      document.getElementById('panelCommunities').style.display = which === 'communities' ? 'block' : 'none';
+      document.getElementById('panelFindPeople').style.display = which === 'findpeople' ? 'block' : 'none';
+      document.getElementById('panelMessages').style.display = which === 'messages' ? 'block' : 'none';
+      if(which === 'messages') loadConversations();
     });
   });
 
@@ -734,8 +753,7 @@
       const hint = i === 0 ? '<div class="swipe-hint">↑ swipe for more people</div>' : '';
       return '<div class="swipe-card">' + bg + '<div class="swipe-card-shade"></div>' + hint +
         '<div class="swipe-card-actions">' +
-          '<button type="button" class="swipe-action-btn like-btn" data-id="' + p.id + '">♥</button>' +
-          '<button type="button" class="swipe-action-btn msg" data-id="' + p.id + '" data-name="' + p.name.replace(/"/g,'&quot;') + '">✉</button>' +
+          '<button type="button" class="swipe-action-btn msg" data-id="' + p.id + '" data-name="' + p.name.replace(/"/g,'&quot;') + '" title="Message">✉</button>' +
         '</div>' +
         '<div class="swipe-card-info">' +
           '<div class="swipe-card-name">' + p.name + '</div>' +
@@ -746,13 +764,6 @@
 
     feed.querySelectorAll('.msg').forEach(btn => {
       btn.addEventListener('click', () => openDm(btn.dataset.id, btn.dataset.name));
-    });
-    feed.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('liked');
-        btn.style.transform = 'scale(1.25)';
-        setTimeout(() => { btn.style.transform = ''; }, 180);
-      });
     });
   }
 
@@ -795,9 +806,9 @@
     const senderIds = [...new Set(msgs.map(m => m.sender_id))];
     let nameMap = {};
     if(senderIds.length > 0){
-      const { data: senders, error: sendersError } = await sb.from('profiles').select('id, name').in('id', senderIds);
+      const { data: senders, error: sendersError } = await sb.from('profiles').select('id, name, university').in('id', senderIds);
       if(sendersError){ console.error('Group chat sender lookup error:', sendersError); }
-      else{ senders.forEach(s => { nameMap[s.id] = s.name; }); }
+      else{ senders.forEach(s => { nameMap[s.id] = s.name + ' — ' + s.university; }); }
     }
 
     win.innerHTML = msgs.map(m => renderBubble(nameMap[m.sender_id] || '?', m.content, m.sender_id === currentUser.id)).join('');
@@ -821,19 +832,28 @@
     activeDmUser = { id: otherId, name: otherName };
     document.getElementById('chatModalName').textContent = otherName;
     document.getElementById('chatModal').style.display = 'flex';
-    await ensureConversation(otherId);
-    loadDmChat();
-    if(dmChatInterval) clearInterval(dmChatInterval);
-    dmChatInterval = setInterval(loadDmChat, 3000);
+    const dmError = document.getElementById('dmChatError');
+    dmError.classList.remove('show');
+    try{
+      await ensureConversation(otherId);
+      if(!activeConversationId){ throw new Error('Could not start this conversation.'); }
+      await loadDmChat();
+      if(dmChatInterval) clearInterval(dmChatInterval);
+      dmChatInterval = setInterval(loadDmChat, 3000);
+    }catch(err){
+      console.error('openDm error:', err);
+      dmError.textContent = err.message || 'Something went wrong opening this chat.';
+      dmError.classList.add('show');
+    }
   }
   async function ensureConversation(otherId){
     const userA = currentUser.id < otherId ? currentUser.id : otherId;
     const userB = currentUser.id < otherId ? otherId : currentUser.id;
     let { data, error } = await sb.from('conversations').select('*').eq('user_a', userA).eq('user_b', userB).maybeSingle();
-    if(error) console.error('Find conversation error:', error);
+    if(error){ console.error('Find conversation error:', error); throw error; }
     if(!data){
       const { data: created, error: createError } = await sb.from('conversations').insert({ user_a: userA, user_b: userB }).select().single();
-      if(createError){ console.error('Create conversation error:', createError); return; }
+      if(createError){ console.error('Create conversation error:', createError); throw createError; }
       data = created;
     }
     activeConversationId = data.id;
@@ -841,25 +861,85 @@
   async function loadDmChat(){
     if(!activeConversationId) return;
     const win = document.getElementById('dmChatWindow');
+    const dmError = document.getElementById('dmChatError');
     const { data, error } = await sb.from('messages').select('*').eq('conversation_id', activeConversationId).order('created_at', { ascending: true }).limit(200);
-    if(error){ console.error('DM load error:', error); return; }
+    if(error){
+      console.error('DM load error:', error);
+      dmError.textContent = 'Couldn\'t load messages: ' + error.message;
+      dmError.classList.add('show');
+      return;
+    }
     win.innerHTML = data.map(m => renderBubble(m.sender_id === currentUser.id ? 'You' : activeDmUser.name, m.content, m.sender_id === currentUser.id)).join('');
     win.scrollTop = win.scrollHeight;
   }
   document.getElementById('dmChatForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const dmError = document.getElementById('dmChatError');
+    dmError.classList.remove('show');
     const input = document.getElementById('dmChatInput');
     const content = input.value.trim();
-    if(!content || !activeConversationId) return;
+    if(!content) return;
+    if(!activeConversationId){
+      dmError.textContent = 'This chat isn\'t ready yet — try closing and reopening it.';
+      dmError.classList.add('show');
+      return;
+    }
     input.value = '';
     const { error } = await sb.from('messages').insert({ conversation_id: activeConversationId, sender_id: currentUser.id, content });
-    if(error) console.error('DM send error:', error);
+    if(error){
+      console.error('DM send error:', error);
+      dmError.textContent = 'Couldn\'t send: ' + error.message;
+      dmError.classList.add('show');
+      return;
+    }
     loadDmChat();
+    loadConversations();
   });
   document.getElementById('chatModalClose').addEventListener('click', () => {
     document.getElementById('chatModal').style.display = 'none';
     if(dmChatInterval) clearInterval(dmChatInterval);
   });
+
+  // ---------- CONVERSATIONS LIST ("Messages" tab) ----------
+  async function loadConversations(){
+    const list = document.getElementById('conversationsList');
+    if(!list) return;
+    list.innerHTML = '<div class="loading-note">Loading…</div>';
+    const { data: convos, error } = await sb.from('conversations')
+      .select('*')
+      .or('user_a.eq.' + currentUser.id + ',user_b.eq.' + currentUser.id)
+      .order('created_at', { ascending: false });
+    if(error){ console.error('Load conversations error:', error); list.innerHTML = '<div class="empty-note">Couldn\'t load your messages.</div>'; return; }
+    if(!convos || convos.length === 0){
+      list.innerHTML = '<div class="empty-note">No conversations yet — message someone from Your Community or Find People.</div>';
+      return;
+    }
+    const otherIds = convos.map(c => c.user_a === currentUser.id ? c.user_b : c.user_a);
+    const { data: profs } = await sb.from('profiles').select('id, name, university, avatar_url').in('id', otherIds);
+    const profMap = {};
+    (profs || []).forEach(p => { profMap[p.id] = p; });
+
+    const items = await Promise.all(convos.map(async (c) => {
+      const otherId = c.user_a === currentUser.id ? c.user_b : c.user_a;
+      const prof = profMap[otherId] || { name: 'Someone', university: '' };
+      const { data: lastMsgs } = await sb.from('messages').select('content, created_at').eq('conversation_id', c.id).order('created_at', { ascending: false }).limit(1);
+      const preview = (lastMsgs && lastMsgs[0]) ? lastMsgs[0].content : 'Say hi 👋';
+      return { otherId, prof, preview };
+    }));
+
+    list.innerHTML = items.map(it => {
+      const avatar = it.prof.avatar_url
+        ? '<img src="' + it.prof.avatar_url + '" class="avatar-img" style="width:46px;height:46px;">'
+        : '<div class="avatar-fallback" style="width:46px;height:46px;font-size:17px;">' + (it.prof.name || '?').charAt(0).toUpperCase() + '</div>';
+      const previewSafe = (it.preview || '').slice(0, 46).replace(/</g,'&lt;');
+      return '<div class="convo-row" data-id="' + it.otherId + '" data-name="' + (it.prof.name || '').replace(/"/g,'&quot;') + '">' + avatar +
+        '<div><div class="convo-name">' + it.prof.name + ' <span class="convo-uni">— ' + it.prof.university + '</span></div><div class="convo-preview">' + previewSafe + '</div></div></div>';
+    }).join('');
+
+    list.querySelectorAll('.convo-row').forEach(row => {
+      row.addEventListener('click', () => openDm(row.dataset.id, row.dataset.name));
+    });
+  }
 
   // Interactive tilt on the decorative boarding pass (auth screen)
   const authMarketing = document.getElementById('authMarketing');
