@@ -31,6 +31,14 @@
   a{ color:inherit; }
   button{ font-family:inherit; }
 
+  #langSwitcher{
+    position:fixed; top:16px; right:16px; z-index:60;
+  }
+  #langSwitcher select{
+    font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--ink);
+    background:var(--paper-2); border:1.5px solid var(--line-soft); border-radius:999px;
+    padding:8px 14px; cursor:pointer; box-shadow:0 4px 12px -4px rgba(22,33,62,0.2);
+  }
   .screen{ min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:8vh 6vw; }
   .wordmark-standalone{
     font-family:var(--font-mono); font-weight:600; font-size:16px; letter-spacing:0.04em; margin-bottom:40px;
@@ -359,6 +367,21 @@
 </head>
 <body>
 
+<div id="langSwitcher">
+  <select id="langSelect">
+    <option value="en">🇬🇧 English</option>
+    <option value="es">🇪🇸 Español</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="de">🇩🇪 Deutsch</option>
+    <option value="it">🇮🇹 Italiano</option>
+    <option value="pt">🇵🇹 Português</option>
+    <option value="zh">🇨🇳 中文</option>
+    <option value="ja">🇯🇵 日本語</option>
+    <option value="ko">🇰🇷 한국어</option>
+    <option value="ar">🇸🇦 العربية</option>
+  </select>
+</div>
+
 <div id="app">
 
   <!-- AUTH SCREEN -->
@@ -370,12 +393,12 @@
         <span class="float-deco d3">🌍</span>
         <span class="float-deco d4">📍</span>
         <div class="wordmark-standalone">LAND<span>ED</span></div>
-        <h1 class="auth-headline">Don't land abroad <em>knowing no one.</em></h1>
-        <p class="auth-sub">Landed connects you with people from any university, heading to your exact destination — before you even board.</p>
+        <h1 class="auth-headline"><span data-i18n="headlineMain">Don't land abroad</span> <em data-i18n="headlineEm">knowing no one.</em></h1>
+        <p class="auth-sub" data-i18n="authSub">Landed connects you with people from any university, heading to your exact destination — before you even board.</p>
         <ul class="auth-bullets">
-          <li><span class="bullet-num">1</span> Create your profile — photo, university, dates</li>
-          <li><span class="bullet-num">2</span> We match you with people going to the same place, same time</li>
-          <li><span class="bullet-num">3</span> Chat with them and land already knowing your people</li>
+          <li><span class="bullet-num">1</span> <span data-i18n="bullet1">Create your profile — photo, university, dates</span></li>
+          <li><span class="bullet-num">2</span> <span data-i18n="bullet2">We match you with people going to the same place, same time</span></li>
+          <li><span class="bullet-num">3</span> <span data-i18n="bullet3">Chat with them and land already knowing your people</span></li>
         </ul>
         <div class="auth-mini-pass">
           <div class="pass">
@@ -400,17 +423,17 @@
         <div class="top-error" id="loadError">Couldn't connect right now — try refreshing the page.</div>
         <div class="auth-card">
           <div class="auth-tabs">
-            <button type="button" class="auth-tab active" data-tab="signin">Log in</button>
-            <button type="button" class="auth-tab" data-tab="signup">Create account</button>
+            <button type="button" class="auth-tab active" data-tab="signin" data-i18n="tabLogin">Log in</button>
+            <button type="button" class="auth-tab" data-tab="signup" data-i18n="tabSignup">Create account</button>
           </div>
           <form id="authForm">
             <div class="field">
-              <label for="authEmail">Email</label>
-              <input id="authEmail" type="email" required placeholder="you@youruni.edu">
+              <label for="authEmail" data-i18n="labelEmail">Email</label>
+              <input id="authEmail" type="email" required placeholder="you@youruni.edu" data-i18n-placeholder="phEmail">
             </div>
             <div class="field">
-              <label for="authPassword">Password</label>
-              <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters">
+              <label for="authPassword" data-i18n="labelPassword">Password</label>
+              <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" data-i18n-placeholder="phPassword">
             </div>
             <button type="submit" class="btn-primary" id="authSubmitBtn" style="width:100%;">Log in</button>
             <div class="error-msg" id="authError"></div>
@@ -424,7 +447,7 @@
   <div id="screenTicket" class="screen" style="display:none;">
     <div class="wordmark-standalone">LAND<span>ED</span></div>
     <div class="ticket-card-outer">
-      <p class="ticket-intro">One profile, one destination — this is your boarding pass into the community. Add a photo so people recognize you.</p>
+      <p class="ticket-intro" data-i18n="ticketIntro">One profile, one destination — this is your boarding pass into the community. Add a photo so people recognize you.</p>
       <form id="profileForm">
         <div class="field">
           <label for="avatarInput">Profile photo</label>
@@ -432,21 +455,31 @@
         </div>
         <div class="row2">
           <div class="field">
-            <label for="pName">Name</label>
+            <label for="pName" data-i18n="labelName">Name</label>
             <input id="pName" required>
           </div>
           <div class="field">
-            <label for="pUniversity">University</label>
+            <label for="pUniversity" data-i18n="labelUniversity">University</label>
             <input id="pUniversity" required>
           </div>
         </div>
         <div class="row2">
           <div class="field">
-            <label for="pDestination">Destination</label>
-            <input id="pDestination" required placeholder="Madrid">
+            <label for="pCountry" data-i18n="labelCountry">Country</label>
+            <select id="pCountry" required>
+              <option value="" data-i18n="selectCountry">Select country…</option>
+            </select>
           </div>
           <div class="field">
-            <label>Dates</label>
+            <label for="pCity" data-i18n="labelCity">City</label>
+            <select id="pCity" required disabled>
+              <option value="" data-i18n="selectCountryFirst">Select country first</option>
+            </select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field" style="grid-column:1/-1;">
+            <label data-i18n="labelDates">Dates</label>
             <div style="display:flex; gap:8px;">
               <input id="pStart" type="date" required>
               <input id="pEnd" type="date" required>
@@ -454,10 +487,10 @@
           </div>
         </div>
         <div class="field">
-          <label for="pBio">About you</label>
+          <label for="pBio" data-i18n="labelBio">About you</label>
           <input id="pBio" placeholder="A line about you — interests, why you're going, whatever">
         </div>
-        <button type="submit" class="btn-primary" id="profileSubmitBtn" style="width:100%;">Create my boarding pass</button>
+        <button type="submit" class="btn-primary" id="profileSubmitBtn" style="width:100%;" data-i18n="btnCreatePass">Create my boarding pass</button>
         <div class="error-msg" id="profileError"></div>
       </form>
     </div>
@@ -468,36 +501,36 @@
     <nav class="app-nav">
       <div class="wordmark">LAND<span>ED</span></div>
       <div class="app-tabs">
-        <button type="button" class="app-tab active" data-tab="communities">Your Community</button>
-        <button type="button" class="app-tab" data-tab="findpeople">Find People</button>
-        <button type="button" class="app-tab" data-tab="messages">Messages</button>
+        <button type="button" class="app-tab active" data-tab="communities" data-i18n="navCommunity">Your Community</button>
+        <button type="button" class="app-tab" data-tab="findpeople" data-i18n="navFindPeople">Find People</button>
+        <button type="button" class="app-tab" data-tab="messages" data-i18n="navMessages">Messages</button>
       </div>
-      <button type="button" id="logoutBtn" class="btn-ghost">Log out</button>
+      <button type="button" id="logoutBtn" class="btn-ghost" data-i18n="btnLogout">Log out</button>
     </nav>
 
     <div id="panelCommunities" class="app-panel">
       <div class="mini-pass" id="miniPass"></div>
 
-      <h3 class="panel-heading">People heading to your destination</h3>
+      <h3 class="panel-heading" data-i18n="headingCommunityPeople">People heading to your destination</h3>
       <div class="profile-grid" id="communityGrid"><div class="loading-note">Loading…</div></div>
 
-      <h3 class="panel-heading">Group chat</h3>
+      <h3 class="panel-heading" data-i18n="headingGroupChat">Group chat</h3>
       <div class="chat-window" id="groupChatWindow"></div>
       <form id="groupChatForm" class="chat-input-row">
-        <input id="groupChatInput" type="text" placeholder="Say hi to your cohort…" required>
+        <input id="groupChatInput" type="text" placeholder="Say hi to your cohort…" required data-i18n-placeholder="phGroupChat">
         <button type="submit" class="btn-primary">Send</button>
       </form>
     </div>
 
     <div id="panelFindPeople" class="app-panel" style="display:none;">
-      <h3 class="panel-heading">Everyone on Landed</h3>
+      <h3 class="panel-heading" id="findPeopleHeading">Everyone heading to your destination</h3>
       <div class="swipe-shell">
         <div class="swipe-feed" id="swipeFeed"><div class="swipe-empty-card">Loading…</div></div>
       </div>
     </div>
 
     <div id="panelMessages" class="app-panel" style="display:none; max-width:520px;">
-      <h3 class="panel-heading">Your conversations</h3>
+      <h3 class="panel-heading" data-i18n="headingMessages">Your conversations</h3>
       <div id="conversationsList"><div class="loading-note">Loading…</div></div>
     </div>
   </div>
@@ -513,7 +546,7 @@
     <div class="chat-window" id="dmChatWindow"></div>
     <div class="error-msg" id="dmChatError" style="margin-bottom:6px;"></div>
     <form id="dmChatForm" class="chat-input-row">
-      <input id="dmChatInput" type="text" placeholder="Type a message…" required>
+      <input id="dmChatInput" type="text" placeholder="Type a message…" required data-i18n-placeholder="phDmChat">
       <button type="submit" class="btn-primary">Send</button>
     </form>
   </div>
@@ -681,16 +714,16 @@
         id: currentUser.id,
         name: document.getElementById('pName').value.trim(),
         university: document.getElementById('pUniversity').value.trim(),
-        destination: document.getElementById('pDestination').value.trim(),
+        destination: document.getElementById('pCity').value,
         start_date: document.getElementById('pStart').value,
         end_date: document.getElementById('pEnd').value,
         bio: document.getElementById('pBio').value.trim(),
         avatar_url: avatarUrl
       };
-      const { error: upsertError } = await sb.from('profiles').upsert(profileData);
+      const { data: savedProfile, error: upsertError } = await sb.from('profiles').upsert(profileData).select().single();
       if(upsertError) throw upsertError;
 
-      currentProfile = profileData;
+      currentProfile = savedProfile;
       screenTicket.style.display = 'none';
       screenMain.style.display = 'flex';
       document.getElementById('miniPass').innerHTML = renderPassCard(currentProfile);
@@ -735,8 +768,13 @@
   // ---------- FIND PEOPLE: everyone ----------
   async function loadAllProfiles(){
     const feed = document.getElementById('swipeFeed');
+    const heading = document.getElementById('findPeopleHeading');
+    if(heading) heading.textContent = 'Everyone heading to ' + currentProfile.destination;
     feed.innerHTML = '<div class="swipe-empty-card">Loading…</div>';
-    const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(100);
+    const { data, error } = await sb.from('profiles')
+      .select('*')
+      .ilike('destination', currentProfile.destination)
+      .order('created_at', { ascending: false }).limit(100);
     if(error){ feed.innerHTML = '<div class="swipe-empty-card">Couldn\'t load people right now.</div>'; return; }
     const others = data.filter(p => p.id !== currentUser.id);
     renderSwipeFeed(feed, others);
@@ -798,10 +836,12 @@
   }
   async function loadGroupChat(){
     const win = document.getElementById('groupChatWindow');
-    const { data: msgs, error } = await sb.from('destination_messages')
+    let query = sb.from('destination_messages')
       .select('*')
       .ilike('destination', currentProfile.destination)
       .order('created_at', { ascending: true }).limit(100);
+    if(currentProfile.created_at){ query = query.gte('created_at', currentProfile.created_at); }
+    const { data: msgs, error } = await query;
     if(error){ console.error('Group chat load error:', error); return; }
 
     const senderIds = [...new Set(msgs.map(m => m.sender_id))];
@@ -940,6 +980,277 @@
     list.querySelectorAll('.convo-row').forEach(row => {
       row.addEventListener('click', () => openDm(row.dataset.id, row.dataset.name));
     });
+  }
+
+  // ---------- COUNTRY → CITY DATA ----------
+  const COUNTRIES = {
+    'Spain': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Granada'],
+    'Italy': ['Rome', 'Florence', 'Milan', 'Bologna', 'Venice'],
+    'France': ['Paris', 'Lyon', 'Nice', 'Bordeaux'],
+    'United Kingdom': ['London', 'Edinburgh', 'Manchester', 'Bristol'],
+    'Germany': ['Berlin', 'Munich', 'Hamburg', 'Cologne'],
+    'Portugal': ['Lisbon', 'Porto'],
+    'Netherlands': ['Amsterdam', 'Rotterdam', 'Utrecht'],
+    'Ireland': ['Dublin', 'Galway'],
+    'Austria': ['Vienna', 'Salzburg'],
+    'Switzerland': ['Zurich', 'Geneva'],
+    'Sweden': ['Stockholm'],
+    'Denmark': ['Copenhagen'],
+    'Greece': ['Athens'],
+    'Czech Republic': ['Prague'],
+    'Japan': ['Tokyo', 'Kyoto', 'Osaka'],
+    'South Korea': ['Seoul', 'Busan'],
+    'Singapore': ['Singapore'],
+    'China': ['Shanghai', 'Beijing'],
+    'Australia': ['Sydney', 'Melbourne', 'Brisbane'],
+    'New Zealand': ['Auckland', 'Wellington'],
+    'Mexico': ['Mexico City', 'Guadalajara'],
+    'Costa Rica': ['San José'],
+    'Argentina': ['Buenos Aires'],
+    'Chile': ['Santiago'],
+    'Brazil': ['São Paulo', 'Rio de Janeiro'],
+    'Canada': ['Toronto', 'Vancouver', 'Montreal'],
+    'South Africa': ['Cape Town'],
+    'Morocco': ['Rabat', 'Marrakech'],
+    'Thailand': ['Bangkok'],
+    'United Arab Emirates': ['Dubai']
+  };
+
+  const pCountry = document.getElementById('pCountry');
+  const pCity = document.getElementById('pCity');
+  if(pCountry){
+    Object.keys(COUNTRIES).sort().forEach(country => {
+      const opt = document.createElement('option');
+      opt.value = country;
+      opt.textContent = country;
+      pCountry.appendChild(opt);
+    });
+    pCountry.addEventListener('change', () => {
+      const cities = COUNTRIES[pCountry.value] || [];
+      pCity.innerHTML = '';
+      if(cities.length === 0){
+        pCity.disabled = true;
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'Select country first';
+        pCity.appendChild(opt);
+        return;
+      }
+      pCity.disabled = false;
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Select city…';
+      pCity.appendChild(placeholder);
+      cities.forEach(city => {
+        const opt = document.createElement('option');
+        opt.value = city;
+        opt.textContent = city;
+        pCity.appendChild(opt);
+      });
+    });
+  }
+
+  // ---------- LANGUAGE / i18n ----------
+  const translations = {
+    en: {
+      headlineMain: "Don't land abroad", headlineEm: 'knowing no one.',
+      authSub: 'Landed connects you with people from any university, heading to your exact destination — before you even board.',
+      bullet1: 'Create your profile — photo, university, dates',
+      bullet2: 'We match you with people going to the same place, same time',
+      bullet3: 'Chat with them and land already knowing your people',
+      tabLogin: 'Log in', tabSignup: 'Create account',
+      labelEmail: 'Email', labelPassword: 'Password',
+      phEmail: 'you@youruni.edu', phPassword: 'At least 6 characters',
+      ticketIntro: 'One profile, one destination — this is your boarding pass into the community. Add a photo so people recognize you.',
+      labelName: 'Name', labelUniversity: 'University', labelCountry: 'Country', labelCity: 'City', labelDates: 'Dates', labelBio: 'About you',
+      selectCountry: 'Select country…', selectCountryFirst: 'Select country first',
+      btnCreatePass: 'Create my boarding pass',
+      navCommunity: 'Your Community', navFindPeople: 'Find People', navMessages: 'Messages', btnLogout: 'Log out',
+      headingCommunityPeople: 'People heading to your destination', headingGroupChat: 'Group chat', headingMessages: 'Your conversations',
+      phGroupChat: 'Say hi to your cohort…', phDmChat: 'Type a message…'
+    },
+    es: {
+      headlineMain: 'No aterrices fuera', headlineEm: 'sin conocer a nadie.',
+      authSub: 'Landed te conecta con gente de cualquier universidad que vaya a tu mismo destino — antes incluso de embarcar.',
+      bullet1: 'Crea tu perfil — foto, universidad, fechas',
+      bullet2: 'Te emparejamos con gente que va al mismo sitio, en las mismas fechas',
+      bullet3: 'Habla con ellos y aterriza ya conociendo a tu gente',
+      tabLogin: 'Iniciar sesión', tabSignup: 'Crear cuenta',
+      labelEmail: 'Email', labelPassword: 'Contraseña',
+      phEmail: 'tu@tuuniversidad.edu', phPassword: 'Al menos 6 caracteres',
+      ticketIntro: 'Un perfil, un destino — este es tu billete de entrada a la comunidad. Añade una foto para que te reconozcan.',
+      labelName: 'Nombre', labelUniversity: 'Universidad', labelCountry: 'País', labelCity: 'Ciudad', labelDates: 'Fechas', labelBio: 'Sobre ti',
+      selectCountry: 'Selecciona país…', selectCountryFirst: 'Selecciona un país primero',
+      btnCreatePass: 'Crear mi billete',
+      navCommunity: 'Tu Comunidad', navFindPeople: 'Encontrar Gente', navMessages: 'Mensajes', btnLogout: 'Cerrar sesión',
+      headingCommunityPeople: 'Gente que va a tu destino', headingGroupChat: 'Chat grupal', headingMessages: 'Tus conversaciones',
+      phGroupChat: 'Saluda a tu grupo…', phDmChat: 'Escribe un mensaje…'
+    },
+    fr: {
+      headlineMain: "N'atterris pas à l'étranger", headlineEm: "sans connaître personne.",
+      authSub: "Landed vous connecte avec des étudiants de toute université, allant vers votre destination exacte — avant même l'embarquement.",
+      bullet1: 'Créez votre profil — photo, université, dates',
+      bullet2: 'Nous vous mettons en relation avec des gens allant au même endroit, en même temps',
+      bullet3: 'Discutez avec eux et arrivez en connaissant déjà vos gens',
+      tabLogin: 'Connexion', tabSignup: 'Créer un compte',
+      labelEmail: 'Email', labelPassword: 'Mot de passe',
+      phEmail: 'vous@votreuniversite.edu', phPassword: 'Au moins 6 caractères',
+      ticketIntro: 'Un profil, une destination — voici votre carte d\'embarquement dans la communauté. Ajoutez une photo.',
+      labelName: 'Nom', labelUniversity: 'Université', labelCountry: 'Pays', labelCity: 'Ville', labelDates: 'Dates', labelBio: 'À propos de vous',
+      selectCountry: 'Choisir un pays…', selectCountryFirst: 'Choisissez un pays d\'abord',
+      btnCreatePass: 'Créer ma carte d\'embarquement',
+      navCommunity: 'Votre communauté', navFindPeople: 'Trouver des gens', navMessages: 'Messages', btnLogout: 'Se déconnecter',
+      headingCommunityPeople: 'Personnes allant vers votre destination', headingGroupChat: 'Chat de groupe', headingMessages: 'Vos conversations',
+      phGroupChat: 'Dites bonjour à votre groupe…', phDmChat: 'Écrivez un message…'
+    },
+    de: {
+      headlineMain: 'Lande nicht im Ausland', headlineEm: 'ohne jemanden zu kennen.',
+      authSub: 'Landed verbindet dich mit Studierenden jeder Uni, die an dein genaues Ziel reisen — noch bevor du einsteigst.',
+      bullet1: 'Erstelle dein Profil — Foto, Uni, Daten',
+      bullet2: 'Wir matchen dich mit Leuten, die zur gleichen Zeit an denselben Ort reisen',
+      bullet3: 'Chatte mit ihnen und lande, ohne fremd zu sein',
+      tabLogin: 'Anmelden', tabSignup: 'Konto erstellen',
+      labelEmail: 'E-Mail', labelPassword: 'Passwort',
+      phEmail: 'du@deineuni.edu', phPassword: 'Mindestens 6 Zeichen',
+      ticketIntro: 'Ein Profil, ein Ziel — das ist dein Boarding-Pass in die Community. Füge ein Foto hinzu.',
+      labelName: 'Name', labelUniversity: 'Universität', labelCountry: 'Land', labelCity: 'Stadt', labelDates: 'Daten', labelBio: 'Über dich',
+      selectCountry: 'Land wählen…', selectCountryFirst: 'Wähle zuerst ein Land',
+      btnCreatePass: 'Boarding-Pass erstellen',
+      navCommunity: 'Deine Community', navFindPeople: 'Leute finden', navMessages: 'Nachrichten', btnLogout: 'Abmelden',
+      headingCommunityPeople: 'Leute, die zu deinem Ziel reisen', headingGroupChat: 'Gruppenchat', headingMessages: 'Deine Unterhaltungen',
+      phGroupChat: 'Sag hallo zu deiner Gruppe…', phDmChat: 'Nachricht schreiben…'
+    },
+    it: {
+      headlineMain: "Non atterrare all'estero", headlineEm: 'senza conoscere nessuno.',
+      authSub: "Landed ti connette con studenti di qualsiasi università diretti alla tua stessa destinazione — prima ancora di imbarcarti.",
+      bullet1: 'Crea il tuo profilo — foto, università, date',
+      bullet2: 'Ti abbiniamo a persone che vanno nello stesso posto, nello stesso periodo',
+      bullet3: 'Chatta con loro e atterra già conoscendo la tua gente',
+      tabLogin: 'Accedi', tabSignup: 'Crea account',
+      labelEmail: 'Email', labelPassword: 'Password',
+      phEmail: 'tu@tuauniversita.edu', phPassword: 'Almeno 6 caratteri',
+      ticketIntro: "Un profilo, una destinazione — questa è la tua carta d'imbarco nella community. Aggiungi una foto.",
+      labelName: 'Nome', labelUniversity: 'Università', labelCountry: 'Paese', labelCity: 'Città', labelDates: 'Date', labelBio: 'Su di te',
+      selectCountry: 'Seleziona paese…', selectCountryFirst: 'Seleziona prima un paese',
+      btnCreatePass: "Crea la mia carta d'imbarco",
+      navCommunity: 'La tua Community', navFindPeople: 'Trova persone', navMessages: 'Messaggi', btnLogout: 'Esci',
+      headingCommunityPeople: 'Persone dirette alla tua destinazione', headingGroupChat: 'Chat di gruppo', headingMessages: 'Le tue conversazioni',
+      phGroupChat: 'Saluta il tuo gruppo…', phDmChat: 'Scrivi un messaggio…'
+    },
+    pt: {
+      headlineMain: 'Não pouses no estrangeiro', headlineEm: 'sem conhecer ninguém.',
+      authSub: 'A Landed conecta-te com estudantes de qualquer universidade que vão para o teu destino exato — antes mesmo de embarcares.',
+      bullet1: 'Cria o teu perfil — foto, universidade, datas',
+      bullet2: 'Juntamos-te com pessoas que vão para o mesmo sítio, na mesma altura',
+      bullet3: 'Conversa com eles e chega já a conhecer a tua gente',
+      tabLogin: 'Entrar', tabSignup: 'Criar conta',
+      labelEmail: 'Email', labelPassword: 'Palavra-passe',
+      phEmail: 'tu@tuauniversidade.edu', phPassword: 'Pelo menos 6 caracteres',
+      ticketIntro: 'Um perfil, um destino — este é o teu cartão de embarque para a comunidade. Adiciona uma foto.',
+      labelName: 'Nome', labelUniversity: 'Universidade', labelCountry: 'País', labelCity: 'Cidade', labelDates: 'Datas', labelBio: 'Sobre ti',
+      selectCountry: 'Seleciona o país…', selectCountryFirst: 'Seleciona primeiro um país',
+      btnCreatePass: 'Criar o meu cartão de embarque',
+      navCommunity: 'A tua Comunidade', navFindPeople: 'Encontrar Pessoas', navMessages: 'Mensagens', btnLogout: 'Sair',
+      headingCommunityPeople: 'Pessoas a caminho do teu destino', headingGroupChat: 'Chat de grupo', headingMessages: 'As tuas conversas',
+      phGroupChat: 'Cumprimenta o teu grupo…', phDmChat: 'Escreve uma mensagem…'
+    },
+    zh: {
+      headlineMain: '别孤身一人', headlineEm: '降落在陌生的国度。',
+      authSub: 'Landed 帮你连接来自任何大学、前往同一目的地的同学 — 甚至在你登机之前。',
+      bullet1: '创建你的资料 — 照片、大学、日期',
+      bullet2: '我们为你匹配同一时间前往同一地点的人',
+      bullet3: '与他们聊天，落地时已经认识你的伙伴',
+      tabLogin: '登录', tabSignup: '注册',
+      labelEmail: '邮箱', labelPassword: '密码',
+      phEmail: 'you@youruni.edu', phPassword: '至少6个字符',
+      ticketIntro: '一个资料，一个目的地 — 这是你加入社区的登机牌。添加照片让大家认出你。',
+      labelName: '姓名', labelUniversity: '大学', labelCountry: '国家', labelCity: '城市', labelDates: '日期', labelBio: '关于你',
+      selectCountry: '选择国家…', selectCountryFirst: '请先选择国家',
+      btnCreatePass: '创建我的登机牌',
+      navCommunity: '你的社区', navFindPeople: '发现同学', navMessages: '消息', btnLogout: '退出登录',
+      headingCommunityPeople: '前往你目的地的人', headingGroupChat: '群聊', headingMessages: '你的对话',
+      phGroupChat: '向你的小组打个招呼…', phDmChat: '输入消息…'
+    },
+    ja: {
+      headlineMain: '知り合いゼロで', headlineEm: '着陸しないで。',
+      authSub: 'Landedは、出発前に同じ目的地へ向かう他大学の学生ともつながれます。',
+      bullet1: 'プロフィールを作成 — 写真、大学、日程',
+      bullet2: '同じ場所・同じ時期に行く人とマッチング',
+      bullet3: 'チャットして、着いた時にはもう仲間がいる状態に',
+      tabLogin: 'ログイン', tabSignup: 'アカウント作成',
+      labelEmail: 'メール', labelPassword: 'パスワード',
+      phEmail: 'you@youruni.edu', phPassword: '6文字以上',
+      ticketIntro: 'ひとつのプロフィール、ひとつの目的地 — コミュニティへの搭乗券です。写真を追加しましょう。',
+      labelName: '名前', labelUniversity: '大学', labelCountry: '国', labelCity: '都市', labelDates: '日程', labelBio: '自己紹介',
+      selectCountry: '国を選択…', selectCountryFirst: '先に国を選んでください',
+      btnCreatePass: '搭乗券を作成',
+      navCommunity: 'コミュニティ', navFindPeople: '仲間を探す', navMessages: 'メッセージ', btnLogout: 'ログアウト',
+      headingCommunityPeople: '同じ目的地へ向かう人たち', headingGroupChat: 'グループチャット', headingMessages: '会話一覧',
+      phGroupChat: 'グループに挨拶しよう…', phDmChat: 'メッセージを入力…'
+    },
+    ko: {
+      headlineMain: '아무도 모르는 곳에', headlineEm: '혼자 도착하지 마세요.',
+      authSub: 'Landed는 같은 목적지로 향하는 다른 대학 학생들과 출발 전부터 연결해 드립니다.',
+      bullet1: '프로필 만들기 — 사진, 대학, 날짜',
+      bullet2: '같은 시기에 같은 곳으로 가는 사람들과 매칭',
+      bullet3: '채팅하고 도착했을 때 이미 아는 사람이 있는 상태로',
+      tabLogin: '로그인', tabSignup: '계정 만들기',
+      labelEmail: '이메일', labelPassword: '비밀번호',
+      phEmail: 'you@youruni.edu', phPassword: '6자 이상',
+      ticketIntro: '하나의 프로필, 하나의 목적지 — 커뮤니티 입장권입니다. 사진을 추가하세요.',
+      labelName: '이름', labelUniversity: '대학교', labelCountry: '국가', labelCity: '도시', labelDates: '날짜', labelBio: '자기소개',
+      selectCountry: '국가 선택…', selectCountryFirst: '먼저 국가를 선택하세요',
+      btnCreatePass: '탑승권 만들기',
+      navCommunity: '내 커뮤니티', navFindPeople: '사람 찾기', navMessages: '메시지', btnLogout: '로그아웃',
+      headingCommunityPeople: '같은 목적지로 가는 사람들', headingGroupChat: '그룹 채팅', headingMessages: '내 대화',
+      phGroupChat: '그룹에 인사하기…', phDmChat: '메시지 입력…'
+    },
+    ar: {
+      headlineMain: 'لا تصل إلى الخارج', headlineEm: 'دون أن تعرف أحداً.',
+      authSub: 'يربطك Landed بطلاب من أي جامعة متجهين إلى نفس وجهتك — حتى قبل صعودك للطائرة.',
+      bullet1: 'أنشئ ملفك الشخصي — صورة، جامعة، تواريخ',
+      bullet2: 'نطابقك مع أشخاص ذاهبين لنفس المكان في نفس الوقت',
+      bullet3: 'تحدث معهم واصل وأنت تعرف رفاقك بالفعل',
+      tabLogin: 'تسجيل الدخول', tabSignup: 'إنشاء حساب',
+      labelEmail: 'البريد الإلكتروني', labelPassword: 'كلمة المرور',
+      phEmail: 'you@youruni.edu', phPassword: '6 أحرف على الأقل',
+      ticketIntro: 'ملف واحد، وجهة واحدة — هذه بطاقة صعودك إلى المجتمع. أضف صورة.',
+      labelName: 'الاسم', labelUniversity: 'الجامعة', labelCountry: 'الدولة', labelCity: 'المدينة', labelDates: 'التواريخ', labelBio: 'عنك',
+      selectCountry: 'اختر الدولة…', selectCountryFirst: 'اختر الدولة أولاً',
+      btnCreatePass: 'إنشاء بطاقة الصعود',
+      navCommunity: 'مجتمعك', navFindPeople: 'ابحث عن أشخاص', navMessages: 'الرسائل', btnLogout: 'تسجيل الخروج',
+      headingCommunityPeople: 'أشخاص متجهون إلى وجهتك', headingGroupChat: 'الدردشة الجماعية', headingMessages: 'محادثاتك',
+      phGroupChat: 'رحّب بمجموعتك…', phDmChat: 'اكتب رسالة…'
+    }
+  };
+
+  function applyLanguage(lang){
+    const t = translations[lang] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if(t[key]) el.textContent = t[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if(t[key]) el.placeholder = t[key];
+    });
+    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+    try{ localStorage.setItem('landed_lang', lang); }catch(e){}
+    // Keep the auth submit button text in sync with the active tab after a language switch
+    const activeAuthTab = document.querySelector('.auth-tab.active');
+    if(activeAuthTab){
+      authSubmitBtn.textContent = activeAuthTab.dataset.tab === 'signin' ? t.tabLogin : t.tabSignup;
+    }
+  }
+
+  const langSelect = document.getElementById('langSelect');
+  if(langSelect){
+    let savedLang = 'en';
+    try{ savedLang = localStorage.getItem('landed_lang') || 'en'; }catch(e){}
+    langSelect.value = savedLang;
+    applyLanguage(savedLang);
+    langSelect.addEventListener('change', () => applyLanguage(langSelect.value));
   }
 
   // Interactive tilt on the decorative boarding pass (auth screen)
