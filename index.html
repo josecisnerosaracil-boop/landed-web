@@ -321,7 +321,7 @@
     position:absolute; inset:0;
     background:linear-gradient(to top, rgba(10,15,30,0.92) 0%, rgba(10,15,30,0.55) 32%, transparent 62%);
   }
-  .swipe-card-info{ position:relative; padding:26px 88px 30px 24px; color:#fff; width:100%; }
+  .swipe-card-info{ position:relative; z-index:2; padding:26px 88px 30px 24px; color:#fff; width:100%; }
   .swipe-card-name{
     font-family:var(--font-display); font-size:26px; font-weight:600;
     font-variation-settings:'SOFT' 50, 'WONK' 1; margin-bottom:8px; line-height:1.05;
@@ -335,6 +335,7 @@
   .swipe-card-bio{ font-size:14px; color:rgba(255,255,255,0.9); max-width:26ch; }
   .swipe-card-actions{
     position:absolute; right:14px; bottom:110px; display:flex; flex-direction:column; gap:18px; align-items:center;
+    z-index:3;
   }
   .swipe-action-btn{
     width:56px; height:56px; border-radius:50%; border:none; cursor:pointer;
